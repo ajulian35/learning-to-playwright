@@ -1,5 +1,9 @@
 # Flujo de Ejecución — TypeScript (Módulo 1)
 
+
+Execute:
+npm start
+
 Hay dos archivos complementarios para TypeScript:
 
 | Archivo | Propósito | Cómo ejecutar |

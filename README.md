@@ -122,10 +122,10 @@ npm test -- --testNamePattern "Tema3"
 
 | Módulo | Descripción | Horas |
 |---|---|:---:|
-| **Módulo 1** | Fundamentos de Programación con Python | 5 h |
+| **Módulo 1** | Fundamentos de Programación con Python | 1 h |
 | **Módulo 2** | Automatización de UI con Playwright | 4.5 h |
 | **Módulo 3** | Automatización de Pruebas de API | 3 h |
 | **Módulo 4** | Inteligencia Artificial en QA | 5 h |
 | **Módulo 5** | Fundamentos de ETL para QA | 6 h |
 | **Módulo 6** | Proyecto Final Integrador | 22 h |
-| **Total** | | **45.5 h** |
+| **Total** | | **41.5 h** |

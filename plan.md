@@ -6,11 +6,11 @@
 
 ## 1. Resumen del Esfuerzo Estimado
 
-El plan de trabajo está estructurado en 6 módulos secuenciales con un total de **45.5 horas** de esfuerzo estimado (distribuidas entre clases teóricos-prácticas y tiempo de práctica autónoma).
+El plan de trabajo está estructurado en 6 módulos secuenciales con un total de **41.5 horas** de esfuerzo estimado (distribuidas entre clases teóricos-prácticas y tiempo de práctica autónoma).
 
 | Módulo | Descripción | Horas Estimadas |
 | :--- | :--- | :---: |
-| **Módulo 1** | Fundamentos de Programación con Python | 5 h |
+| **Módulo 1** | Fundamentos de Programación con Python | 1 h |
 | **Módulo 2** | Automatización de UI con Playwright y Python | 4.5 h |
 | **Módulo 3** | Automatización de Pruebas de API | 3 h |
 | **Módulo 4** | Inteligencia Artificial en QA: Agentes y Skills de Claude | 5 h |
@@ -22,15 +22,15 @@ El plan de trabajo está estructurado en 6 módulos secuenciales con un total de
 
 ## 2. Derrotero Detallado y Objetivos por Módulo
 
-### Módulo 1: Fundamentos de Programación con Python (5 horas)
+### Módulo 1: Fundamentos de Programación con Python (1 hora)
 *Enfoque: Traducir la lógica analítica de QA al pensamiento computacional y sintaxis de código.*
 
 #### Temario y Distribución de Horas
-   **Conceptos básicos:** Sintaxis, tipos de datos, variables y operadores. *(1h)*
-   **Estructuras de control:** Condicionales (`if/else`) y bucles (`for/while`). *(1h)*
-   **Estructuras de datos:** Listas, diccionarios, tuplas y sets. *(1h)*
-   **Funciones y modularidad:** Argumentos, retornos y manejo de excepciones (`try/except`). *(1h)*
-   **Introducción a OOP:** Clases, objetos, métodos y atributos (clave para patrones de diseño en QA). *(1h)*
+   **Conceptos básicos:** Sintaxis, tipos de datos, variables y operadores. **
+   **Estructuras de control:** Condicionales (`if/else`) y bucles (`for/while`). **
+   **Estructuras de datos:** Listas, diccionarios, tuplas y sets. **
+   **Funciones y modularidad:** Argumentos, retornos y manejo de excepciones (`try/except`). **
+   **Introducción a OOP:** Clases, objetos, métodos y atributos (clave para patrones de diseño en QA). **
 
 #### Objetivos de Aprendizaje
    **Aprender** la sintaxis básica de Python y el flujo de control para escribir scripts limpios.

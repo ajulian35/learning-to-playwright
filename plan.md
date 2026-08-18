@@ -119,4 +119,3 @@ El plan de trabajo está estructurado en 6 módulos secuenciales con un total de
    **Consolidar** las habilidades adquiridas mediante el desarrollo de un framework de automatización desde cero.
    **Entregar** un pipeline de pruebas funcional que combine UI, API, bases de datos y asistencia de IA.
    **Defender** el código ante una revisión técnica (*Code Review*), demostrando buenas prácticas de desarrollo y control de versiones con Git.
-

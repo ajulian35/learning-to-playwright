@@ -253,3 +253,57 @@ await card.get_by_role("button", name="Eliminar").click()
 | `getByTitle` | Tooltips o íconos con atributo `title` | ⭐⭐⭐ |
 | `locator('css=...')` | Estructuras complejas sin atributo de accesibilidad | ⭐⭐⭐ |
 | `locator('xpath=...')` | Último recurso: relaciones DOM no expresables de otra forma | ⭐⭐ |
+
+---
+
+## ⏱️ 7. Manejo de Esperas: Implícitas vs. Explícitas
+
+### Espera Implícita (Auto-waiting)
+
+Playwright las maneja **automáticamente**. Antes de ejecutar una acción sobre un localizador, Playwright espera sin que escribas nada:
+
+- Que el elemento exista en el DOM
+- Que sea visible
+- Que esté habilitado (no disabled)
+- Que sea estable (no en animación)
+
+```python
+# Playwright espera sola — no necesitas hacer nada extra
+page.locator("#btn-guardar").click()
+page.locator("input[name='email']").fill("test@mail.com")
+```
+
+> Esto es distinto a Selenium, donde `implicitly_wait(10)` era un timer global crudo.
+
+---
+
+### Espera Explícita
+
+La escribes **tú** cuando necesitas esperar una condición de negocio específica que el auto-wait no cubre:
+
+```python
+# Esperar que un elemento sea visible
+page.locator(".mensaje-exito").wait_for(state="visible")
+
+# Esperar que una URL cambie (navegación post-login)
+page.wait_for_url("**/dashboard")
+
+# Esperar respuesta de red
+with page.expect_response("**/api/usuarios") as resp:
+    page.locator("#btn-buscar").click()
+response = resp.value
+```
+
+---
+
+### Cuándo usar cada una
+
+| Situación | Qué usar |
+| :--- | :--- |
+| Click, fill, check en un elemento | Auto-wait (implícita) — Playwright lo hace solo |
+| Esperar que aparezca un mensaje de éxito | `wait_for(state="visible")` — explícita |
+| Esperar navegación a otra página | `wait_for_url()` — explícita |
+| Esperar que se complete una llamada API | `expect_response()` — explícita |
+| Esperar que un elemento desaparezca | `wait_for(state="hidden")` — explícita |
+
+> **Regla práctica:** si el test falla por timing y el elemento está en estado incorrecto (spinner, loading, etc.), usa espera explícita. Nunca uses `time.sleep()` — enmascara problemas en lugar de resolverlos.

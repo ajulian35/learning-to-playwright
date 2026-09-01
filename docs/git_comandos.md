@@ -1,260 +1,260 @@
-# Comandos Git más Usados en QA Automation
+# Most Used Git Commands in QA Automation
 
-Referencia práctica de los comandos Git que usarás en el día a día trabajando con repositorios de pruebas automatizadas.
+Practical reference for the Git commands you will use daily when working with automated test repositories.
 
 ---
 
-## ⚙️ 1. Configuración Inicial (una sola vez)
+## ⚙️ 1. Initial Setup (one time only)
 
-Antes de hacer tu primer commit, Git necesita saber quién eres.
+Before your first commit, Git needs to know who you are.
 
 ```bash
-git config --global user.name  "Tu Nombre"
-git config --global user.email "tu@correo.com"
+git config --global user.name  "Your Name"
+git config --global user.email "your@email.com"
 
-# Verificar que quedó guardado
+# Verify the config was saved
 git config --list
 ```
 
 ---
 
-## 🗂️ 2. Iniciar o Clonar un Repositorio
+## 🗂️ 2. Initialize or Clone a Repository
 
 ```bash
-# Iniciar un repositorio en una carpeta local existente
+# Initialize a repository in an existing local folder
 git init
 
-# Clonar un repositorio remoto (GitHub, GitLab, etc.)
-git clone https://github.com/usuario/repositorio.git
+# Clone a remote repository (GitHub, GitLab, etc.)
+git clone https://github.com/user/repository.git
 
-# Clonar en una carpeta con nombre específico
-git clone https://github.com/usuario/repositorio.git mi-carpeta
+# Clone into a folder with a specific name
+git clone https://github.com/user/repository.git my-folder
 ```
 
 ---
 
-## 📸 3. El Flujo Básico: Guardar Cambios
+## 📸 3. The Basic Flow: Saving Changes
 
-Este es el ciclo que repetirás decenas de veces al día.
+This is the cycle you will repeat dozens of times a day.
 
 ```bash
-# 1. Ver qué archivos cambiaron
+# 1. See which files changed
 git status
 
-# 2. Agregar un archivo específico al área de preparación (staging)
-git add nombre_del_archivo.py
+# 2. Add a specific file to the staging area
+git add file_name.py
 
-# Agregar todos los archivos modificados
+# Add all modified files
 git add .
 
-# 3. Guardar los cambios con un mensaje descriptivo
-git commit -m "feat: agrega test de login con credenciales inválidas"
+# 3. Save the changes with a descriptive message
+git commit -m "feat: add login test with invalid credentials"
 
-# Ver el historial de commits
+# View the commit history
 git log --oneline
 ```
 
-> **Tip:** Un buen mensaje de commit describe el QUÉ y el POR QUÉ, no el cómo.
-> Convención recomendada: `tipo: descripción breve`
-> - `feat:` — nueva funcionalidad o test
-> - `fix:` — corrección de un test o bug
-> - `refactor:` — mejora del código sin cambiar comportamiento
-> - `docs:` — cambios en documentación
+> **Tip:** A good commit message describes the WHAT and the WHY, not the how.
+> Recommended convention: `type: short description`
+> - `feat:` — new feature or test
+> - `fix:` — fix for a test or bug
+> - `refactor:` — code improvement without changing behavior
+> - `docs:` — documentation changes
 
 ---
 
-## 🌿 4. Ramas (Branches)
+## 🌿 4. Branches
 
-Las ramas permiten trabajar en funcionalidades o módulos de forma aislada sin afectar el código principal.
+Branches let you work on features or modules in isolation without affecting the main code.
 
 ```bash
-# Ver todas las ramas locales
+# List all local branches
 git branch
 
-# Ver ramas locales Y remotas
+# List local AND remote branches
 git branch -a
 
-# Crear una nueva rama
-git branch nombre-de-la-rama
+# Create a new branch
+git branch branch-name
 
-# Crear una rama Y moverse a ella en un solo paso (recomendado)
-git checkout -b nombre-de-la-rama
+# Create a branch AND switch to it in one step (recommended)
+git checkout -b branch-name
 
-# Moverse a una rama existente
-git checkout nombre-de-la-rama
+# Switch to an existing branch
+git checkout branch-name
 
-# Eliminar una rama local (solo si ya fue fusionada)
-git branch -d nombre-de-la-rama
+# Delete a local branch (only if already merged)
+git branch -d branch-name
 
-# Renombrar la rama actual
-git branch -m nuevo-nombre
+# Rename the current branch
+git branch -m new-name
 ```
 
 ---
 
-## 🔀 5. Fusionar Cambios (Merge y Rebase)
+## 🔀 5. Merging Changes (Merge and Rebase)
 
 ```bash
-# Fusionar la rama "feature/login" en la rama actual
+# Merge the "feature/login" branch into the current branch
 git merge feature/login
 
-# Abortar un merge que tiene conflictos (volver al estado anterior)
+# Abort a merge that has conflicts (return to prior state)
 git merge --abort
 
-# Rebase: reescribir el historial aplicando los commits encima de otra rama
-# (usado para mantener un historial lineal y limpio)
+# Rebase: rewrite history by applying commits on top of another branch
+# (used to keep a linear and clean history)
 git rebase main
 ```
 
 > **Merge vs Rebase:**
-> - `merge` conserva el historial exacto (dos líneas que se unen).
-> - `rebase` produce un historial lineal y más limpio, pero reescribe los commits.
-> En equipos: preferir `merge` para ramas compartidas, `rebase` para ramas personales antes de hacer PR.
+> - `merge` preserves the exact history (two lines joining).
+> - `rebase` produces a linear, cleaner history, but rewrites commits.
+> In teams: prefer `merge` for shared branches, `rebase` for personal branches before a PR.
 
 ---
 
-## 🌐 6. Trabajo con el Repositorio Remoto
+## 🌐 6. Working with the Remote Repository
 
 ```bash
-# Ver los remotos configurados
+# View configured remotes
 git remote -v
 
-# Descargar cambios del remoto SIN fusionarlos
+# Download changes from remote WITHOUT merging
 git fetch origin
 
-# Descargar Y fusionar cambios de la rama actual
+# Download AND merge changes from the current branch
 git pull origin main
 
-# Subir una rama al remoto por primera vez
-git push -u origin nombre-de-la-rama
+# Push a branch to remote for the first time
+git push -u origin branch-name
 
-# Subir commits adicionales (después del primer push)
+# Push additional commits (after the first push)
 git push
 
-# Eliminar una rama del remoto
-git push origin --delete nombre-de-la-rama
+# Delete a branch from the remote
+git push origin --delete branch-name
 ```
 
 ---
 
-## 🔍 7. Inspeccionar Cambios
+## 🔍 7. Inspecting Changes
 
 ```bash
-# Ver los cambios no preparados (unstaged) línea por línea
+# View unstaged changes line by line
 git diff
 
-# Ver los cambios preparados (staged), listos para el commit
+# View staged changes, ready to commit
 git diff --staged
 
-# Ver el historial con detalle
+# View the history with details
 git log
 
-# Historial compacto (una línea por commit)
+# Compact history (one line per commit)
 git log --oneline
 
-# Historial gráfico de ramas (muy útil para entender merges)
+# Graphical branch history (very useful for understanding merges)
 git log --oneline --graph --all
 
-# Ver qué cambió en un commit específico
+# See what changed in a specific commit
 git show abc1234
 ```
 
 ---
 
-## ↩️ 8. Deshacer Cambios
+## ↩️ 8. Undoing Changes
 
-| Situación | Comando |
+| Situation | Command |
 | :--- | :--- |
-| Descartar cambios en un archivo (no preparado) | `git restore nombre_archivo.py` |
-| Sacar un archivo del staging (sin perder cambios) | `git restore --staged nombre_archivo.py` |
-| Revertir el último commit (mantiene los cambios en staging) | `git reset --soft HEAD~1` |
-| Revertir el último commit (mantiene los cambios sin staging) | `git reset HEAD~1` |
-| Crear un commit que deshace otro commit ya publicado | `git revert abc1234` |
+| Discard changes in a file (unstaged) | `git restore file_name.py` |
+| Remove a file from staging (without losing changes) | `git restore --staged file_name.py` |
+| Undo the last commit (keeps changes in staging) | `git reset --soft HEAD~1` |
+| Undo the last commit (keeps changes unstaged) | `git reset HEAD~1` |
+| Create a commit that reverts an already-published commit | `git revert abc1234` |
 
-> ⚠️ **Precaución:** `git reset --hard` descarta cambios permanentemente. Úsalo solo si estás seguro de que no necesitas los archivos modificados.
+> ⚠️ **Caution:** `git reset --hard` permanently discards changes. Use it only if you are sure you don't need the modified files.
 
 ---
 
-## 🗃️ 9. Stash — Guardar Cambios Temporalmente
+## 🗃️ 9. Stash — Temporarily Save Changes
 
-Útil cuando necesitas cambiar de rama rápidamente sin perder trabajo en progreso.
+Useful when you need to switch branches quickly without losing work in progress.
 
 ```bash
-# Guardar los cambios actuales en un "cajón temporal"
+# Save current changes in a "temporary drawer"
 git stash
 
-# Guardar con un nombre descriptivo
-git stash push -m "wip: test de búsqueda avanzada"
+# Save with a descriptive name
+git stash push -m "wip: advanced search test"
 
-# Ver todos los stashes guardados
+# View all saved stashes
 git stash list
 
-# Recuperar el último stash (y eliminarlo de la lista)
+# Restore the latest stash (and remove it from the list)
 git stash pop
 
-# Recuperar un stash específico por índice
+# Restore a specific stash by index
 git stash pop stash@{2}
 
-# Eliminar todos los stashes
+# Delete all stashes
 git stash clear
 ```
 
 ---
 
-## 🏷️ 10. Tags — Marcar Versiones
+## 🏷️ 10. Tags — Mark Versions
 
 ```bash
-# Crear un tag ligero
+# Create a lightweight tag
 git tag v1.0
 
-# Crear un tag anotado (recomendado para releases)
-git tag -a v1.0 -m "Release inicial del framework de pruebas"
+# Create an annotated tag (recommended for releases)
+git tag -a v1.0 -m "Initial release of the test framework"
 
-# Ver todos los tags
+# View all tags
 git tag
 
-# Subir un tag al remoto
+# Push a tag to remote
 git push origin v1.0
 
-# Subir todos los tags al remoto
+# Push all tags to remote
 git push origin --tags
 ```
 
 ---
 
-## ⚠️ 11. Anti-patrones: Qué Evitar
+## ⚠️ 11. Anti-patterns: What to Avoid
 
-| Anti-patrón | Problema | Buena práctica |
+| Anti-pattern | Problem | Best practice |
 | :--- | :--- | :--- |
-| `git add .` sin revisar primero | Puede incluir archivos de configuración local, `.env` o binarios. | Hacer `git status` antes y agregar archivos por nombre o carpeta. |
-| Commits con mensaje `"fix"` o `"prueba"` | Ilegibles en el historial; imposible saber qué cambió. | Usar la convención `tipo: descripción` (ej. `fix: corrige selector del botón de login`). |
-| Trabajar directamente en `main` | Un error afecta a todo el equipo. | Siempre crear una rama por tarea o módulo. |
-| `git push --force` en una rama compartida | Reescribe el historial remoto y rompe el trabajo de otros. | Usar `--force-with-lease` solo si es imprescindible y en ramas propias. |
-| Commits gigantes con muchos cambios | Difíciles de revisar y de revertir si algo falla. | Commits pequeños y atómicos: un cambio lógico por commit. |
+| `git add .` without reviewing first | May include local config files, `.env`, or binaries. | Run `git status` first and add files by name or folder. |
+| Commit messages like `"fix"` or `"test"` | Unreadable in history; impossible to know what changed. | Use the convention `type: description` (e.g. `fix: correct login button selector`). |
+| Working directly on `main` | One mistake affects the whole team. | Always create a branch per task or module. |
+| `git push --force` on a shared branch | Rewrites remote history and breaks others' work. | Use `--force-with-lease` only if absolutely necessary and on your own branches. |
+| Giant commits with many changes | Hard to review and to revert if something breaks. | Small, atomic commits: one logical change per commit. |
 
 ---
 
-## 📋 12. Cheatsheet Rápido
+## 📋 12. Quick Cheatsheet
 
 ```
 # Setup
 git config --global user.name / user.email
 
-# Ciclo diario
-git status          → ver qué cambió
-git add <archivo>   → preparar cambio
-git commit -m "..."  → guardar commit
-git push             → subir al remoto
-git pull             → bajar cambios
+# Daily cycle
+git status          → see what changed
+git add <file>      → stage change
+git commit -m "..."  → save commit
+git push             → push to remote
+git pull             → pull changes
 
-# Ramas
-git checkout -b <rama>   → crear y moverse
-git checkout <rama>      → moverse
-git merge <rama>         → fusionar
-git branch -d <rama>     → eliminar
+# Branches
+git checkout -b <branch>   → create and switch
+git checkout <branch>      → switch
+git merge <branch>         → merge
+git branch -d <branch>     → delete
 
-# Emergencias
-git restore <archivo>         → descartar cambio
-git reset HEAD~1              → deshacer último commit
-git stash / git stash pop     → guardar/recuperar trabajo temporal
+# Emergencies
+git restore <file>            → discard change
+git reset HEAD~1              → undo last commit
+git stash / git stash pop     → save/restore temporary work
 ```

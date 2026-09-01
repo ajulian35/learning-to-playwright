@@ -1,61 +1,68 @@
-# 🚀 SQL Cheat Sheet: Guía de Referencia Rápida
-Esta guía contiene los comandos, funciones y cláusulas esenciales de SQL para el diseño, consulta y optimización de bases de datos relacionales. Ideal para estudiantes de ingeniería de sistemas y desarrolladores.
+# 🚀 SQL Cheat Sheet: Quick Reference Guide
+This guide contains the essential SQL commands, functions, and clauses for designing, querying, and optimizing relational databases.
 
 ---
 
-## 1. Tipos de Combinaciones (JOINS)
-* **`INNER JOIN` / `JOIN`**: Combina filas de ambas tablas solo cuando hay una coincidencia exacta en la condición indicada (`ON`). Es el tipo de unión por defecto.
-* **`LEFT JOIN`**: Trae todos los registros de la tabla izquierda y las coincidencias de la derecha. Si no hay pareja, rellena los campos de la derecha con `NULL`.
-* **`RIGHT JOIN`**: Trae todos los registros de la tabla derecha y las coincidencias de la izquierda. Si no hay pareja, rellena los campos de la izquierda con `NULL`.
-* **`FULL OUTER JOIN`**: Trae absolutamente todos los registros de ambas tablas, tengan o no relación entre sí, rellenando los campos vacíos con `NULL`.
-* **`CROSS JOIN`**: Realiza un producto cartesiano. Multiplica cada fila de la primera tabla por cada fila de la segunda tabla (genera combinaciones masivas).
-* **`SELF JOIN`**: Técnica de unir una tabla consigo misma (utilizando alias distintos como `tabla A` y `tabla B`) para consultar estructuras jerárquicas como jefes y empleados.
+## 1. Join Types
+
+* **`INNER JOIN` / `JOIN`**: Combines rows from both tables only when there is an exact match on the specified condition (`ON`). This is the default join type.
+* **`LEFT JOIN`**: Returns all records from the left table and matching records from the right. If there is no match, the right-side fields are filled with `NULL`.
+* **`RIGHT JOIN`**: Returns all records from the right table and matching records from the left. If there is no match, the left-side fields are filled with `NULL`.
+* **`FULL OUTER JOIN`**: Returns all records from both tables regardless of whether they match, filling unmatched fields with `NULL`.
+* **`CROSS JOIN`**: Performs a Cartesian product. Multiplies every row from the first table by every row from the second table (generates massive combinations).
+* **`SELF JOIN`**: Technique for joining a table with itself (using different aliases like `table A` and `table B`) to query hierarchical structures such as managers and employees.
 
 ---
 
-## 2. Funciones de Agregación
-* **`COUNT(*)`**: Cuenta el total de filas devueltas por la consulta, incluyendo aquellos registros cuyos campos contengan valores nulos (`NULL`).
-* **`COUNT(columna)`**: Cuenta únicamente los registros que contienen un valor válido en esa columna específica (ignora por completo los valores `NULL`).
-* **`SUM()`**: Suma todos los valores numéricos de una columna. Devuelve `NULL` si el grupo evaluado no contiene ningún dato.
-* **`AVG()`**: Calcula el promedio aritmético de una columna numérica e ignora los valores `NULL` automáticamente al realizar el cálculo.
-* **`MAX()`**: Encuentra y devuelve el valor más alto (o la fecha más reciente/letra final en textos) de una columna.
-* **`MIN()`**: Encuentra y devuelve el valor más bajo (o la fecha más antigua/letra inicial en textos) de una columna.
+## 2. Aggregate Functions
+
+* **`COUNT(*)`**: Counts the total number of rows returned by the query, including rows whose fields contain null values (`NULL`).
+* **`COUNT(column)`**: Counts only the records that have a valid value in that specific column (completely ignores `NULL` values).
+* **`SUM()`**: Sums all numeric values in a column. Returns `NULL` if the evaluated group contains no data.
+* **`AVG()`**: Calculates the arithmetic average of a numeric column and automatically ignores `NULL` values.
+* **`MAX()`**: Finds and returns the highest value (or the most recent date / last letter for text) in a column.
+* **`MIN()`**: Finds and returns the lowest value (or the oldest date / first letter for text) in a column.
 
 ---
 
-## 3. Cláusulas de Agrupamiento y Filtro Avanzado
-* **`GROUP BY`**: Agrupa filas que comparten los mismos valores en columnas específicas para poder aplicar funciones de agregación sobre cada grupo.
-* **`HAVING`**: Filtra los resultados **después** de haber sido agrupados por el `GROUP BY`. Es el equivalente al `WHERE` pero exclusivo para funciones de agregación.
-* **`ORDER BY`**: Ordena el resultado final de la consulta de forma ascendente (`ASC`, valor por defecto) o descendente (`DESC`).
+## 3. Grouping and Advanced Filter Clauses
+
+* **`GROUP BY`**: Groups rows that share the same values in specific columns so that aggregate functions can be applied to each group.
+* **`HAVING`**: Filters results **after** they have been grouped by `GROUP BY`. It is the equivalent of `WHERE` but exclusive to aggregate functions.
+* **`ORDER BY`**: Sorts the final query result in ascending (`ASC`, default) or descending (`DESC`) order.
 
 ---
 
-## 4. Control de Valores Nulos y Lógica
-* **`COALESCE(val1, val2, ...)`**: Evalúa los argumentos en orden (de izquierda a derecha) y devuelve el primer valor que encuentre que **no** sea `NULL`. Ideal para asignar valores por defecto (como un `0`).
-* **`CASE WHEN ... THEN ... ELSE ... END`**: Estructura condicional (equivalente al `if-else` en lenguajes de programación) para evaluar condiciones fila por fila directamente en la consulta.
-* **`IS NULL` / `IS NOT NULL`**: Operadores lógicos utilizados en la cláusula `WHERE` para verificar correctamente si un campo está vacío o contiene información.
+## 4. Null Value Control and Logic
+
+* **`COALESCE(val1, val2, ...)`**: Evaluates arguments in order (left to right) and returns the first value that is **not** `NULL`. Ideal for assigning default values (such as `0`).
+* **`CASE WHEN ... THEN ... ELSE ... END`**: Conditional structure (equivalent to `if-else` in programming languages) for evaluating conditions row by row directly in the query.
+* **`IS NULL` / `IS NOT NULL`**: Logical operators used in the `WHERE` clause to correctly check whether a field is empty or contains data.
 
 ---
 
-## 5. Estructuras Avanzadas y Rendimiento
-* **`WITH (CTE)`**: Expresión de Tabla Común (Common Table Expression). Permite crear tablas temporales con nombre dentro de la misma consulta para organizar y simplificar código complejo.
-* **`WITH RECURSIVE`**: Variante de las CTEs que permite a una consulta llamarse a sí misma de forma iterativa para recorrer jerarquías profundas o infinitas (como organigramas o árboles de categorías).
-* **`CREATE INDEX`**: Comando para crear una estructura de datos ordenada (índice) sobre una o más columnas, acelerando drásticamente búsquedas, agrupaciones y uniones (`JOINS`).
+## 5. Advanced Structures and Performance
+
+* **`WITH (CTE)`**: Common Table Expression. Allows creating named temporary tables within the same query to organize and simplify complex code.
+* **`WITH RECURSIVE`**: Variant of CTEs that allows a query to call itself iteratively to traverse deep or infinite hierarchies (such as org charts or category trees).
+* **`CREATE INDEX`**: Command to create an ordered data structure (index) on one or more columns, drastically speeding up searches, groupings, and joins.
 
 ---
 
-## 6. operaciones de conjuntos
-* **`UNION ALL`**: Todo el Conjunto A + Todo el Conjunto B (sin repetidos).
-* **`UNION`**: Todo el Conjunto A + Todo el Conjunto B (con repetidos).
-* **`INTERSECT`**: Solo la zona donde el Conjunto A y el Conjunto B se cruzan.
-* **`EXCEPT / MINU`**:  El Conjunto A limpio, quitándole cualquier elemento del Conjunto B.
+## 6. Set Operations
+
+* **`UNION ALL`**: All of Set A + All of Set B (including duplicates).
+* **`UNION`**: All of Set A + All of Set B (removing duplicates).
+* **`INTERSECT`**: Only the rows that exist in both Set A and Set B.
+* **`EXCEPT / MINUS`**: Set A minus any elements that also appear in Set B.
 
 ---
 
-## 7. Herramientas de SQL
-* **`DISTINCT`**: consultar (SELECT)Eliminar filas repetidas en el resultado visual.
-* **`UNIQUE`**: crear la tabla (CREATE)Garantizar por seguridad que nadie duplique un dato (ej. Cédula, RFC, Correo).
-* **`LIMIT / TOP`**: consultar (SELECT)Controlar el volumen de datos para no saturar la memoria de la aplicación.
-* **`OFFSET`**: Trabaja de la mano con LIMIT. Le dice a la base de datos cuántos registros debe saltarse antes de empezar a mostrar los resultados. LIMIT 10 OFFSET 20;
+## 7. SQL Utilities
+
+* **`DISTINCT`**: Used in `SELECT` — removes duplicate rows from the result set.
+* **`UNIQUE`**: Used in `CREATE TABLE` — ensures no duplicate values are inserted in a column (e.g. ID, email).
+* **`LIMIT / TOP`**: Used in `SELECT` — controls the volume of data returned to avoid saturating application memory.
+* **`OFFSET`**: Works alongside `LIMIT`. Tells the database how many records to skip before starting to return results. Example: `LIMIT 10 OFFSET 20`.
 
 ---

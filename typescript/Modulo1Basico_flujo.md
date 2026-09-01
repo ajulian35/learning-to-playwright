@@ -1,40 +1,40 @@
-# Flujo de Ejecución — TypeScript (Módulo 1)
+# Execution Flow — TypeScript (Module 1)
 
 
 Execute:
 npm start
 
-Hay dos archivos complementarios para TypeScript:
+There are two complementary TypeScript files:
 
-| Archivo | Propósito | Cómo ejecutar |
+| File | Purpose | How to run |
 |---|---|---|
-| `modulo1_basico.ts` | Script de demostración — imprime en consola | `npm start` |
-| `modulo1_basico.test.ts` | Tests con Jest — verifica con `expect()` | `npm test` |
+| `modulo1_basico.ts` | Demo script — prints to console | `npm start` |
+| `modulo1_basico.test.ts` | Jest tests — verifies with `expect()` | `npm test` |
 
 ---
 
-## `modulo1_basico.ts` — Script de demostración
+## `modulo1_basico.ts` — Demo script
 
-No tiene un `main` explícito. TypeScript (igual que Python) ejecuta el código al nivel
-raíz de arriba a abajo cuando se corre con `ts-node`.
+Has no explicit `main`. TypeScript (like Python) executes root-level code top to bottom
+when run with `ts-node`.
 
 ```
-línea 7-10   →  define variables (suite, version, totalEjecutados, hayFallos)
-línea 15-16  →  define el array readonly ESTADOS_VALIDOS (equivalente a tupla)
-línea 18-19  →  define el tipo Estado ("PASSED" | "FAILED" | "SKIPPED")
-línea 21-27  →  define la interface CasoPrueba y el array casos
-línea 30-60  →  define funciones y la clase (solo las registra, NO las ejecuta)
+line 7-10    →  define variables (suite, version, totalExecuted, hasFailures)
+line 15-16   →  define the readonly VALID_STATES array (equivalent to a tuple)
+line 18-19   →  define the Status type ("PASSED" | "FAILED" | "SKIPPED")
+line 21-27   →  define the TestCase interface and cases array
+line 30-60   →  define functions and the class (only registers them, does NOT execute)
 
----- aquí empieza la ejecución real ----
-línea 91     →  crea el objeto ReportePruebas
-línea 92     →  imprime el encabezado
-línea 95-107 →  recorre cada caso con el bucle for...of
-línea 110    →  calcula el resumen
-línea 111    →  imprime el pie
-línea 114-117→  imprime el mensaje final
+---- actual execution starts here ----
+line 91      →  create the TestReport object
+line 92      →  print the header
+line 95-107  →  iterate over each case with the for...of loop
+line 110     →  calculate the summary
+line 111     →  print the footer
+line 114-117 →  print the final message
 ```
 
-### Comando
+### Command
 
 ```bash
 npm start
@@ -42,61 +42,61 @@ npm start
 
 ---
 
-## `modulo1_basico.test.ts` — Tests con Jest
+## `modulo1_basico.test.ts` — Jest tests
 
-Cada `describe` agrupa los tests de un tema. Jest descubre y ejecuta todos los
-bloques `test()` automáticamente.
+Each `describe` groups tests for one topic. Jest discovers and runs all
+`test()` blocks automatically.
 
 ```
-describe("Tema1 - Variables y tipos")
-  └── test: las variables tienen los tipos y valores correctos
+describe("Topic1 - Variables and types")
+  └── test: variables have the correct types and values
 
-describe("Tema2 - Estructuras de datos")
-  ├── test: el array de estados validos tiene 3 elementos
-  ├── test: el array de casos tiene la estructura correcta
-  └── test: se pueden filtrar casos por estado
+describe("Topic2 - Data structures")
+  ├── test: valid states array has 3 elements
+  ├── test: cases array has the correct structure
+  └── test: cases can be filtered by status
 
-describe("Tema2 - Condicionales y bucles")
-  ├── test: el bucle detecta fallos y acumula el total ejecutado
-  └── test: el mensaje final depende del condicional
+describe("Topic2 - Conditionals and loops")
+  ├── test: loop detects failures and accumulates total executed
+  └── test: final message depends on the conditional
 
-describe("Tema3 - Funciones y excepciones")
-  ├── test: imprimirResultado retorna el mensaje correcto por estado
-  ├── test: validarEstado no lanza error con estados validos
-  └── test: validarEstado lanza error con estado desconocido
+describe("Topic3 - Functions and exceptions")
+  ├── test: printResult returns the correct message per status
+  ├── test: validateStatus does not throw with valid statuses
+  └── test: validateStatus throws with unknown status
 
-describe("Tema4 - calcularResumen")
-  ├── test: calcula los conteos y tasa de exito correctamente
-  └── test: tasa es 0 si no hay casos ejecutados
+describe("Topic4 - calculateSummary")
+  ├── test: calculates counts and success rate correctly
+  └── test: rate is 0 if no cases were executed
 
-describe("Tema5 - Clase ReportePruebas")
-  ├── test: el constructor asigna suite y version correctamente
-  └── test: se pueden crear multiples instancias independientes
+describe("Topic5 - Class TestReport")
+  ├── test: constructor assigns suite and version correctly
+  └── test: multiple independent instances can be created
 ```
 
-### Comando
+### Command
 
 ```bash
 npm test
 ```
 
-Para correr solo un describe específico:
+To run only a specific describe:
 
 ```bash
-npm test -- --testNamePattern "Tema3"
+npm test -- --testNamePattern "Topic3"
 ```
 
 ---
 
-## Comparación entre los tres lenguajes
+## Comparison across three languages
 
 | | Python | C# | TypeScript |
 |---|---|---|---|
-| Archivo de demo | `modulo1_basico.py` | — | `modulo1_basico.ts` |
-| Archivo de tests | — | `Modulo1Basico.cs` | `modulo1_basico.test.ts` |
-| Framework de tests | pytest | NUnit | Jest |
-| Comando demo | `python modulo1_basico.py` | — | `npm start` |
-| Comando tests | `pytest tests/` | `dotnet test --filter "Modulo1Basico"` | `npm test` |
-| Tipos de datos | dinámico | estático estricto | estático (compilado) |
-| Estructura de datos dict | `dict` | `Dictionary<string,string>` | `interface` / objeto |
-| Tupla (inmutable) | `tuple` | `readonly string[]` | `as const` array |
+| Demo file | `modulo1_basico.py` | — | `modulo1_basico.ts` |
+| Test file | — | `Modulo1Basico.cs` | `modulo1_basico.test.ts` |
+| Test framework | pytest | NUnit | Jest |
+| Demo command | `python modulo1_basico.py` | — | `npm start` |
+| Test command | `pytest tests/` | `dotnet test --filter "Modulo1Basico"` | `npm test` |
+| Data types | dynamic | strictly static | static (compiled) |
+| Dict data structure | `dict` | `Dictionary<string,string>` | `interface` / object |
+| Immutable tuple | `tuple` | `readonly string[]` | `as const` array |

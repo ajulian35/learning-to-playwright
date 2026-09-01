@@ -1,8 +1,8 @@
-# Flujo de Ejecución — `Modulo1Basico.cs`
+# Execution Flow — `Modulo1Basico.cs`
 
-En C# este archivo **no tiene un `Main` explícito**. En lugar de eso, usa el
-framework **NUnit** para ejecutar cada método marcado con `[Test]` de forma
-independiente. El runner (`dotnet test`) es quien decide qué ejecutar y en qué orden.
+In C# this file **has no explicit `Main`**. Instead, it uses the
+**NUnit** framework to run each method marked with `[Test]` independently.
+The runner (`dotnet test`) decides what to execute and in what order.
 
 
 Execute:
@@ -10,66 +10,66 @@ Execute:
 
 ---
 
-## Estructura del archivo
+## File structure
 
 ```
 namespace PlaywrightComparison
 │
-├── [TestFixture] Modulo1BasicoTests          ← clase contenedora de los tests
+├── [TestFixture] Modulo1BasicoTests          ← class containing the tests
 │   │
-│   ├── constantes y datos (Suite, Casos...)  ← se definen al cargar la clase
+│   ├── constants and data (Suite, Cases...)  ← defined when the class loads
 │   │
-│   ├── métodos privados (equivalente a funciones de Python)
-│   │   ├── ImprimirResultado()
-│   │   ├── CalcularResumen()
-│   │   └── ValidarEstado()
+│   ├── private methods (equivalent to Python functions)
+│   │   ├── PrintResult()
+│   │   ├── CalculateSummary()
+│   │   └── ValidateStatus()
 │   │
-│   ├── clase interna ReportePruebas (OOP)
+│   ├── inner class TestReport (OOP)
 │   │
-│   └── [Test] métodos — cada uno es un caso ejecutable
-│       ├── Tema1_VariablesYTipos()
-│       ├── Tema2_EstructurasDeDatos()
-│       ├── Tema2_CondicionalesYBucles()
-│       ├── Tema3_MetodosYExcepciones()
-│       ├── Tema4_ResumenConMetodos()
-│       └── Tema5_OOP_ClaseReporte()
+│   └── [Test] methods — each one is a runnable case
+│       ├── Topic1_VariablesAndTypes()
+│       ├── Topic2_DataStructures()
+│       ├── Topic2_ConditionalsAndLoops()
+│       ├── Topic3_MethodsAndExceptions()
+│       ├── Topic4_SummaryWithMethods()
+│       └── Topic5_OOP_TestReportClass()
 ```
 
 ---
 
-## Orden de ejecución al correr `dotnet test`
+## Execution order when running `dotnet test`
 
 ```
-1. dotnet compila el proyecto completo
-2. NUnit descubre todos los métodos marcados con [Test]
-3. Por cada [Test]:
-      a. crea una instancia nueva de Modulo1BasicoTests
-      b. ejecuta el método
-      c. evalúa los Assert — si falla uno, el test se marca FAILED
-4. Al final imprime el resumen: Passed / Failed / Total time
+1. dotnet compiles the full project
+2. NUnit discovers all methods marked with [Test]
+3. For each [Test]:
+      a. creates a new instance of Modulo1BasicoTests
+      b. runs the method
+      c. evaluates Assert — if one fails, the test is marked FAILED
+4. At the end prints the summary: Passed / Failed / Total time
 ```
 
 ---
 
-## Comando para ejecutar solo estos tests
+## Command to run only these tests
 
 ```bash
 dotnet test --filter "Modulo1Basico"
 ```
 
-Para ejecutar un test específico:
+To run a specific test:
 
 ```bash
-dotnet test --filter "Tema3_MetodosYExcepciones"
+dotnet test --filter "Topic3_MethodsAndExceptions"
 ```
 
 ---
 
-## Diferencia con Python
+## Difference from Python
 
 | | Python (`modulo1_basico.py`) | C# (`Modulo1Basico.cs`) |
 |---|---|---|
-| Punto de entrada | Código al nivel raíz, se ejecuta de arriba a abajo | Métodos `[Test]`, NUnit los ejecuta uno por uno |
-| Aislamiento | Una sola ejecución continua, el estado se comparte | Cada `[Test]` es independiente |
-| Cómo correrlo | `python modulo1_basico.py` | `dotnet test --filter "Modulo1Basico"` |
-| Verificación de resultados | `print()` en consola | `Assert.That()` — falla el test si no se cumple |
+| Entry point | Root-level code, runs top to bottom | `[Test]` methods, NUnit runs them one by one |
+| Isolation | Single continuous run, state is shared | Each `[Test]` is independent |
+| How to run | `python modulo1_basico.py` | `dotnet test --filter "Modulo1Basico"` |
+| Result verification | `print()` to console | `Assert.That()` — fails the test if condition not met |

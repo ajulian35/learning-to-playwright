@@ -1,121 +1,121 @@
-# Plan de Capacitación: De QA Manual/Funcional a QA Automation
-**Audiencia:** Expertos en QA sin experiencia previa en programación o automatización.
-**Stack Tecnológico:** Python, Playwright, Claude AI (Agentes y Skills), SQL/ETL.
+# Training Plan: From Manual/Functional QA to QA Automation
+**Audience:** QA experts with no prior programming or automation experience.
+**Tech Stack:** Python, Playwright, Claude AI (Agents and Skills), SQL/ETL.
 
 ---
 
-## 1. Resumen del Esfuerzo Estimado
+## 1. Estimated Effort Summary
 
-El plan de trabajo está estructurado en 6 módulos secuenciales con un total de **41.5 horas** de esfuerzo estimado (distribuidas entre clases teóricos-prácticas y tiempo de práctica autónoma).
+The plan is structured in 6 sequential modules totaling **41.5 hours** of estimated effort (split between instructor-led sessions and self-directed practice time).
 
-| Módulo | Descripción | Horas Estimadas |
+| Module | Description | Estimated Hours |
 | :--- | :--- | :---: |
-| **Módulo 1** | Fundamentos de Programación con Python | 1 h |
-| **Módulo 2** | Automatización de UI con Playwright y Python | 4.5 h |
-| **Módulo 3** | Automatización de Pruebas de API | 3 h |
-| **Módulo 4** | Inteligencia Artificial en QA: Agentes y Skills de Claude | 5 h |
-| **Módulo 5** | Fundamentos de ETL para QA | 6 h |
-| **Módulo 6** | Proyecto Final Integrador | 22 h |
-| **Total** | **Esfuerzo Total del Plan de Trabajo** | **45.5 h** |
+| **Module 1** | Programming Fundamentals with Python | 1 h |
+| **Module 2** | UI Automation with Playwright and Python | 4.5 h |
+| **Module 3** | API Test Automation | 3 h |
+| **Module 4** | Artificial Intelligence in QA: Claude Agents and Skills | 5 h |
+| **Module 5** | ETL Fundamentals for QA | 6 h |
+| **Module 6** | Final Integration Project | 22 h |
+| **Total** | **Total Plan Effort** | **41.5 h** |
 
 ---
 
-## 2. Derrotero Detallado y Objetivos por Módulo
+## 2. Detailed Syllabus and Learning Objectives per Module
 
-### Módulo 1: Fundamentos de Programación con Python (1 hora)
-*Enfoque: Traducir la lógica analítica de QA al pensamiento computacional y sintaxis de código.*
+### Module 1: Programming Fundamentals with Python (1 hour)
+*Focus: Translate QA analytical thinking into computational logic and code syntax.*
 
-#### Temario y Distribución de Horas
-   **Conceptos básicos:** Sintaxis, tipos de datos, variables y operadores. **
-   **Estructuras de control:** Condicionales (`if/else`) y bucles (`for/while`). **
-   **Estructuras de datos:** Listas, diccionarios, tuplas y sets. **
-   **Funciones y modularidad:** Argumentos, retornos y manejo de excepciones (`try/except`). **
-   **Introducción a OOP:** Clases, objetos, métodos y atributos (clave para patrones de diseño en QA). **
+#### Topics
+   **Basic concepts:** Syntax, data types, variables, and operators.
+   **Control structures:** Conditionals (`if/else`) and loops (`for/while`).
+   **Data structures:** Lists, dictionaries, tuples, and sets.
+   **Functions and modularity:** Arguments, return values, and exception handling (`try/except`).
+   **Intro to OOP:** Classes, objects, methods, and attributes (key for QA design patterns).
 
-#### Objetivos de Aprendizaje
-   **Aprender** la sintaxis básica de Python y el flujo de control para escribir scripts limpios.
-   **Manipular** estructuras de datos (listas, diccionarios) para gestionar datos de prueba dinámicos.
-   **Implementar** el manejo de excepciones para que los scripts de prueba no fallen abruptamente ante errores inesperados.
-   **Aplicar** conceptos de Programación Orientada a Objetos (POO) para modelar elementos de software de forma reutilizable.
-
----
-
-### Módulo 2: Automatización de UI con Playwright y Python (4.5 horas)
-*Enfoque: Interactuar con navegadores web de forma automatizada y crear scripts robustos.*
-
-#### Temario y Distribución de Horas
-   **Configuración del entorno:** Instalación de Playwright, Python y VS Code. *(30m)*
-   **Selectores avanzados:** Localizadores nativos de Playwright, XPath y CSS Selectors. *(1h)*
-   **Interacciones y esperas:** Clics, inputs, aserciones web y manejo de esperas implícitas/explícitas. *(1h)*
-   **Estructura de proyectos:** Uso de `pytest` como ejecutor de pruebas y configuración de reportes. *(1h)*
-   **Patrón de diseño:** Implementación de Page Object Model (POM). *(1h)*
-   **Creación test cases:** scenarios and test cases. ** 
-   **Git:** Connect to GitHub
-
-#### Objetivos de Aprendizaje
-   **Configurar** entornos de automatización locales estructurados y reproducibles.
-   **Identificar** elementos web de forma robusta utilizando localizadores avanzados y estrategias resilientes al cambio de interfaz.
-   **Construir** scripts de prueba funcionales controlando interacciones, aserciones web y esperas asíncronas de Playwright.
-   **Diseñar** una arquitectura de pruebas escalable utilizando el patrón Page Object Model (POM) y `pytest`.
+#### Learning Objectives
+   **Learn** Python's basic syntax and control flow to write clean scripts.
+   **Manipulate** data structures (lists, dictionaries) to manage dynamic test data.
+   **Implement** exception handling so test scripts don't crash abruptly on unexpected errors.
+   **Apply** Object-Oriented Programming (OOP) concepts to model software elements in a reusable way.
 
 ---
 
-### Módulo 3: Automatización de Pruebas de API (3 horas)
-*Enfoque: Validar la capa de servicios de forma ágil e integrarla con las pruebas de interfaz.*
+### Module 2: UI Automation with Playwright and Python (4.5 hours)
+*Focus: Interact with web browsers programmatically and build robust test scripts.*
 
-#### Temario y Distribución de Horas
-   **Conceptos HTTP:** Métodos (GET, POST, PUT, DELETE), códigos de estado y headers. *(1h)*
-   **Pruebas con Playwright API:** Consumo de endpoints y validación de respuestas JSON. *(1h)*
-   **Estrategias avanzadas:** Autenticación (Tokens/Cookies), variables de entorno y preparación de datos. *(1h)*
-   **Creación test cases:** scenarios and test cases. **
-   **Git:** Connect to GitHub
+#### Topics
+   **Environment setup:** Installing Playwright, Python, and VS Code. *(30m)*
+   **Advanced selectors:** Playwright native locators, XPath, and CSS Selectors. *(1h)*
+   **Interactions and waits:** Clicks, inputs, web assertions, and implicit/explicit wait handling. *(1h)*
+   **Project structure:** Using `pytest` as a test runner and configuring reports. *(1h)*
+   **Design pattern:** Page Object Model (POM) implementation. *(1h)*
+   **Test case creation:** Scenarios and test cases.
+   **Git:** Connect to GitHub.
 
-#### Objetivos de Aprendizaje
-   **Validar** respuestas de servicios web (REST APIs) mediante la verificación de códigos de estado, headers y esquemas JSON.
-   **Automatizar** flujos que requieran autenticación por tokens o manejo avanzado de sesiones.
-   **Integrar** pruebas de API y UI en un mismo flujo de automatización (ej. preparar datos por API antes de probar la UI).
-
----
-
-### Módulo 4: Inteligencia Artificial en QA: Agentes y Skills de Claude (5 horas)
-*Enfoque: Utilizar IA avanzada como catalizador para potenciar y acelerar el ciclo de automatización.*
-
-#### Temario y Distribución de Horas
-   **Fundamentos de IA GenAI:** Prompts efectivos para generación de código de prueba y análisis de fallos. *(1h)*
-   **Agentes de Claude:** Configuración y uso de agentes para análisis de requerimientos y creación de casos de prueba automatizados. *(2h)*
-   **Claude Skills (Herramientas):** Integración de Claude con scripts de Python para autocuración de pruebas (Self-healing tests) o generación de reportes inteligentes. *(2h)*
-
-#### Objetivos de Aprendizaje
-   **Optimizar** el tiempo de desarrollo de pruebas usando Claude como copiloto para la generación de código y refactorización.
-   **Configurar** agentes de Claude orientados a la traducción automatizada de historias de usuario a scripts de prueba.
-   **Desarrollar** "skills" de Claude personalizadas que interactúen con código Python para analizar reportes de fallos o realizar autocuración (*self-healing*) de pruebas de UI.
+#### Learning Objectives
+   **Configure** structured and reproducible local automation environments.
+   **Identify** web elements reliably using advanced locators and UI-change-resilient strategies.
+   **Build** functional test scripts by controlling interactions, web assertions, and Playwright async waits.
+   **Design** a scalable test architecture using the Page Object Model (POM) pattern and `pytest`.
 
 ---
 
-### Módulo 5: Fundamentos de ETL para QA (6 horas)
-*Enfoque: Validar el movimiento, transformación y consistencia de datos en sistemas back-end.*
+### Module 3: API Test Automation (3 hours)
+*Focus: Validate the service layer efficiently and integrate it with UI tests.*
 
-#### Temario y Distribución de Horas
-   **Introducción a ETL:** Conceptos de Extracción, Transformación y Carga de datos. *(1h)*
-   **Validación de bases de datos:** Conexión a bases de datos relacionales desde Python. *(2h)*
-   **Estrategias de prueba ETL:** Validación del conteo de filas, tipos de datos y transformaciones lógicas. *(3h)*
+#### Topics
+   **HTTP concepts:** Methods (GET, POST, PUT, DELETE), status codes, and headers. *(1h)*
+   **Playwright API testing:** Consuming endpoints and validating JSON responses. *(1h)*
+   **Advanced strategies:** Authentication (Tokens/Cookies), environment variables, and data setup. *(1h)*
+   **Test case creation:** Scenarios and test cases.
+   **Git:** Connect to GitHub.
 
-#### Objetivos de Aprendizaje
-   **Comprender** el flujo de datos en procesos ETL para identificar puntos críticos de falla.
-   **Conectar** scripts de Python con bases de datos para realizar consultas de verificación automatizadas.
-   **Diseñar** scripts que validen la integridad, transformación correcta y completitud de los datos entre origen y destino.
+#### Learning Objectives
+   **Validate** web service responses (REST APIs) by verifying status codes, headers, and JSON schemas.
+   **Automate** flows requiring token-based authentication or advanced session handling.
+   **Integrate** API and UI tests in the same automation flow (e.g., set up data via API before testing the UI).
 
 ---
 
-### Módulo 6: Proyecto Final Integrador (22 horas)
-*Enfoque: Consolidar todo el conocimiento en un repositorio profesional listo para producción.*
+### Module 4: Artificial Intelligence in QA: Claude Agents and Skills (5 hours)
+*Focus: Use advanced AI as a catalyst to enhance and accelerate the automation cycle.*
 
-#### Temario y Distribución de Horas
-   **Definición:** Automatizar un flujo end-to-end de una aplicación real o mock que incluya: UI, API y un script asistido por Claude. *(3h)*
-   **Desarrollo autónomo:** Mentoría, resolución de dudas y buenas prácticas de Git/GitHub. *(14h)*
-   **Presentación:** Revisión de código (Code Review), simulación de entrega real y documentación. *(5h)*
+#### Topics
+   **GenAI fundamentals:** Effective prompts for test code generation and failure analysis. *(1h)*
+   **Claude Agents:** Setting up and using agents for requirements analysis and automated test case creation. *(2h)*
+   **Claude Skills (Tools):** Integrating Claude with Python scripts for self-healing tests or intelligent report generation. *(2h)*
 
-#### Objetivos de Aprendizaje
-   **Consolidar** las habilidades adquiridas mediante el desarrollo de un framework de automatización desde cero.
-   **Entregar** un pipeline de pruebas funcional que combine UI, API, bases de datos y asistencia de IA.
-   **Defender** el código ante una revisión técnica (*Code Review*), demostrando buenas prácticas de desarrollo y control de versiones con Git.
+#### Learning Objectives
+   **Optimize** test development time by using Claude as a copilot for code generation and refactoring.
+   **Configure** Claude agents oriented toward automated translation of user stories into test scripts.
+   **Develop** custom Claude skills that interact with Python code to analyze failure reports or perform self-healing on UI tests.
+
+---
+
+### Module 5: ETL Fundamentals for QA (6 hours)
+*Focus: Validate the movement, transformation, and consistency of data in back-end systems.*
+
+#### Topics
+   **ETL introduction:** Extract, Transform, and Load concepts. *(1h)*
+   **Database validation:** Connecting to relational databases from Python. *(2h)*
+   **ETL testing strategies:** Validating row counts, data types, and logical transformations. *(3h)*
+
+#### Learning Objectives
+   **Understand** data flows in ETL processes to identify critical failure points.
+   **Connect** Python scripts to databases to run automated verification queries.
+   **Design** scripts that validate data integrity, correct transformation, and completeness between source and destination.
+
+---
+
+### Module 6: Final Integration Project (22 hours)
+*Focus: Consolidate all knowledge in a professional, production-ready repository.*
+
+#### Topics
+   **Definition:** Automate an end-to-end flow for a real or mock application covering UI, API, and a Claude-assisted script. *(3h)*
+   **Autonomous development:** Mentoring, Q&A sessions, and Git/GitHub best practices. *(14h)*
+   **Presentation:** Code review, real-delivery simulation, and documentation. *(5h)*
+
+#### Learning Objectives
+   **Consolidate** acquired skills by building an automation framework from scratch.
+   **Deliver** a functional test pipeline combining UI, API, databases, and AI assistance.
+   **Present** the code in a technical code review, demonstrating development best practices and version control with Git.

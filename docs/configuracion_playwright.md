@@ -1,55 +1,55 @@
-# Configuración del Proyecto con Playwright
+# Project Setup with Playwright
 
-Guía de instalación y configuración para los tres lenguajes del plan de capacitación: **TypeScript**, **Python** y **C#**. El rendimiento de ejecución de pruebas es equivalente en los tres porque todos se comunican con el mismo motor de Playwright vía protocolo interno.
+Installation and configuration guide for all three languages in the training plan: **TypeScript**, **Python**, and **C#**. Test execution performance is equivalent across all three because they all communicate with the same Playwright engine via an internal protocol.
 
 ---
 
-## ✅ Prerrequisitos Comunes
+## ✅ Common Prerequisites
 
-Antes de configurar cualquier lenguaje, verificar que el sistema tenga instalados:
+Before setting up any language, verify the system has the following installed:
 
-| Herramienta | Versión mínima | Verificar con |
+| Tool | Minimum version | Verify with |
 | :--- | :---: | :--- |
 | **Node.js** | 18+ | `node --version` |
 | **Python** | 3.8+ | `python --version` |
 | **.NET SDK** | 8+ | `dotnet --version` |
-| **Git** | cualquiera | `git --version` |
-| **VS Code** | cualquiera | — |
+| **Git** | any | `git --version` |
+| **VS Code** | any | — |
 
-> **PowerShell** también debe estar disponible (`pwsh --version`) para la instalación de browsers en C#.
+> **PowerShell** must also be available (`pwsh --version`) for browser installation in C#.
 
 ---
 
-## 🟦 1. TypeScript con `@playwright/test`
+## 🟦 1. TypeScript with `@playwright/test`
 
-### Estado actual del proyecto
-El directorio `typescript/` ya tiene configurado Jest + TypeScript para el Módulo 1 (fundamentos). Playwright tiene su propio runner de pruebas (`@playwright/test`) que **reemplaza a Jest** para los tests de UI.
+### Current project state
+The `typescript/` directory already has Jest + TypeScript configured for Module 1 (fundamentals). Playwright has its own test runner (`@playwright/test`) that **replaces Jest** for UI tests.
 
-### Paso 1 — Instalar dependencias
+### Step 1 — Install dependencies
 
-Desde la carpeta `typescript/`:
+From the `typescript/` folder:
 
 ```bash
 npm install -D @playwright/test
 ```
 
-> Esto agrega `@playwright/test` al `package.json`. El resto de dependencias (typescript, tsx, etc.) ya están instaladas.
+> This adds `@playwright/test` to `package.json`. The rest of the dependencies (typescript, tsx, etc.) are already installed.
 
-### Paso 2 — Instalar los navegadores
+### Step 2 — Install browsers
 
 ```bash
 npx playwright install
 ```
 
-Esto descarga Chromium, Firefox y WebKit. Para instalar solo uno:
+Downloads Chromium, Firefox, and WebKit. To install only one:
 
 ```bash
 npx playwright install chromium
 ```
 
-### Paso 3 — Crear el archivo de configuración
+### Step 3 — Create the config file
 
-Crear `typescript/playwright.config.ts`:
+Create `typescript/playwright.config.ts`:
 
 ```typescript
 import { defineConfig, devices } from '@playwright/test';
@@ -80,9 +80,9 @@ export default defineConfig({
 });
 ```
 
-### Paso 4 — Actualizar `tsconfig.json`
+### Step 4 — Update `tsconfig.json`
 
-Agregar los tipos de Playwright al `compilerOptions`:
+Add Playwright types to `compilerOptions`:
 
 ```json
 {
@@ -99,9 +99,9 @@ Agregar los tipos de Playwright al `compilerOptions`:
 }
 ```
 
-### Paso 5 — Actualizar `package.json`
+### Step 5 — Update `package.json`
 
-Agregar los scripts para Playwright junto a los existentes:
+Add Playwright scripts alongside the existing ones:
 
 ```json
 {
@@ -115,78 +115,78 @@ Agregar los scripts para Playwright junto a los existentes:
 }
 ```
 
-### Paso 6 — Crear la carpeta de tests y un test inicial
+### Step 6 — Create the tests folder and an initial test
 
 ```
 typescript/
 └── tests/
-    └── ejemplo.spec.ts
+    └── example.spec.ts
 ```
 
 ```typescript
-// tests/ejemplo.spec.ts
+// tests/example.spec.ts
 import { test, expect } from '@playwright/test';
 
-test('la página principal carga correctamente', async ({ page }) => {
+test('home page loads correctly', async ({ page }) => {
   await page.goto('https://playwright.dev');
   await expect(page).toHaveTitle(/Playwright/);
 });
 ```
 
-### Paso 7 — Ejecutar los tests
+### Step 7 — Run the tests
 
 ```bash
-# Ejecutar todos los tests E2E
+# Run all E2E tests
 npm run test:e2e
 
-# Ejecutar con interfaz gráfica (modo UI)
+# Run with graphical UI mode
 npm run test:e2e:ui
 
-# Ver reporte HTML con resultados
+# View HTML report with results
 npm run test:e2e:report
 ```
 
 ---
 
-## 🐍 2. Python con `pytest-playwright`
+## 🐍 2. Python with `pytest-playwright`
 
-### Estado actual del proyecto
-El directorio `python/` ya tiene `pytest.ini` configurado con `--headed` y `--slowmo=500`. Solo falta instalar los paquetes y los navegadores.
+### Current project state
+The `python/` directory already has `pytest.ini` configured with `--headed` and `--slowmo=500`. You only need to install the packages and browsers.
 
-### Paso 1 — Crear un entorno virtual (recomendado)
+### Step 1 — Create a virtual environment (recommended)
 
 ```bash
-# Desde la raíz del proyecto
+# From the project root
 python -m venv .venv
 
-# Activar en Windows
+# Activate on Windows
 .venv\Scripts\activate
 
-# Activar en macOS/Linux
+# Activate on macOS/Linux
 source .venv/bin/activate
 ```
 
-### Paso 2 — Instalar dependencias
+### Step 2 — Install dependencies
 
 ```bash
 pip install playwright pytest-playwright
 ```
 
-### Paso 3 — Instalar los navegadores
+### Step 3 — Install browsers
 
 ```bash
 playwright install
 ```
 
-Para instalar solo Chromium:
+To install only Chromium:
 
 ```bash
 playwright install chromium
 ```
 
-### Paso 4 — Verificar `pytest.ini`
+### Step 4 — Verify `pytest.ini`
 
-El archivo ya existe en `python/pytest.ini`. Contenido actual:
+The file already exists in `python/pytest.ini`. Current content:
 
 ```ini
 [pytest]
@@ -194,7 +194,7 @@ testpaths = tests
 addopts = --headed --slowmo=500
 ```
 
-Opciones disponibles para ampliar:
+Available options to extend:
 
 ```ini
 [pytest]
@@ -208,79 +208,79 @@ addopts =
     --self-contained-html
 ```
 
-> Para el reporte HTML se necesita instalar: `pip install pytest-html`
+> For the HTML report you need to install: `pip install pytest-html`
 
-### Paso 5 — Crear la carpeta de tests y un test inicial
+### Step 5 — Create the tests folder and an initial test
 
 ```
 python/
 └── tests/
-    ├── __init__.py       (archivo vacío, necesario para que pytest reconozca el paquete)
-    └── test_ejemplo.py
+    ├── __init__.py       (empty file, required for pytest to recognize the package)
+    └── test_example.py
 ```
 
 ```python
-# tests/test_ejemplo.py
+# tests/test_example.py
 from playwright.sync_api import Page, expect
 
-def test_pagina_principal_carga(page: Page):
+def test_home_page_loads(page: Page):
     page.goto("https://playwright.dev")
     expect(page).to_have_title(re.compile("Playwright"))
 ```
 
-> `page` es un **fixture** que `pytest-playwright` inyecta automáticamente. No hace falta crear el browser manualmente.
+> `page` is a **fixture** injected automatically by `pytest-playwright`. No need to create the browser manually.
 
-### Paso 6 — Ejecutar los tests
+### Step 6 — Run the tests
 
 ```bash
-# Desde la carpeta python/
+# From the python/ folder
 pytest
 
-# Solo un archivo
-pytest tests/test_ejemplo.py
+# Single file
+pytest tests/test_example.py
 
-# Con nombre de test específico
-pytest -k "test_pagina_principal_carga"
+# By specific test name
+pytest -k "test_home_page_loads"
 
-# Sin browser visible (modo headless)
+# Headless mode
 pytest --headed=false
 ```
 
 ---
 
-## 🟣 3. C# con `Microsoft.Playwright.NUnit`
+## 🟣 3. C# with `Microsoft.Playwright.NUnit`
 
-### Estado actual del proyecto
-El directorio `csharp/` ya tiene el paquete `Microsoft.Playwright.NUnit` 1.61.0 en el `.csproj`. Solo falta compilar e instalar los navegadores.
+### Current project state
+The `csharp/` directory already has `Microsoft.Playwright.NUnit` 1.61.0 in the `.csproj`. You only need to build and install the browsers.
 
-### Paso 1 — Compilar el proyecto
+### Step 1 — Build the project
 
 ```bash
-# Desde la carpeta csharp/
+# From the csharp/ folder
 dotnet build
 ```
 
-Esto restaura los paquetes NuGet y compila el proyecto.
+Restores NuGet packages and compiles the project.
 
-### Paso 2 — Instalar los navegadores
+### Step 2 — Install browsers
 
-Playwright para .NET incluye un script PowerShell para la instalación de browsers. Ejecutar **después de compilar**:
+Playwright for .NET includes a PowerShell script for browser installation. Run **after building**:
 
 ```powershell
 pwsh bin/Debug/net9.0/playwright.ps1 install
 ```
 
-Para instalar solo Chromium:
+To install only Chromium:
 
 ```powershell
 pwsh bin/Debug/net9.0/playwright.ps1 install chromium
 ```
 
-> Si `pwsh` no está disponible, instalar PowerShell desde: `winget install Microsoft.PowerShell`
+> If `pwsh` is not available, install PowerShell with: `winget install Microsoft.PowerShell`
 
-### Paso 3 — Crear un archivo de configuración (opcional pero recomendado)
+### Step 3 — Create a config file (optional but recommended)
 
-Crear `csharp/.runsettings` para controlar el comportamiento de los tests:
+Create `csharp/.runsettings` to control test behavior:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -295,20 +295,20 @@ Crear `csharp/.runsettings` para controlar el comportamiento de los tests:
 </RunSettings>
 ```
 
-### Paso 4 — Crear un test inicial
+### Step 4 — Create an initial test
 
 ```csharp
-// Tests/EjemploTest.cs
+// Tests/ExampleTest.cs
 using Microsoft.Playwright.NUnit;
 using NUnit.Framework;
 
 namespace PlaywrightTests;
 
 [TestFixture]
-public class EjemploTest : PageTest
+public class ExampleTest : PageTest
 {
     [Test]
-    public async Task PaginaPrincipalCargaCorrectamente()
+    public async Task HomePageLoadsCorrectly()
     {
         await Page.GotoAsync("https://playwright.dev");
         await Expect(Page).ToHaveTitleAsync(new Regex("Playwright"));
@@ -316,31 +316,31 @@ public class EjemploTest : PageTest
 }
 ```
 
-> `PageTest` es la clase base de `Microsoft.Playwright.NUnit`. Expone `Page`, `Browser` y `Context` como propiedades listas para usar.
+> `PageTest` is the base class from `Microsoft.Playwright.NUnit`. Exposes `Page`, `Browser`, and `Context` as ready-to-use properties.
 
-### Paso 5 — Ejecutar los tests
+### Step 5 — Run the tests
 
 ```bash
-# Ejecutar todos los tests
+# Run all tests
 dotnet test
 
-# Con el archivo de configuración
+# With config file
 dotnet test --settings .runsettings
 
-# Filtrar por nombre
-dotnet test --filter "PaginaPrincipalCargaCorrectamente"
+# Filter by name
+dotnet test --filter "HomePageLoadsCorrectly"
 ```
 
 ---
 
-## 📁 Estructura de Carpetas Recomendada
+## 📁 Recommended Folder Structure
 
 ```
 Learning_to_Playwright/
 ├── typescript/
 │   ├── tests/
 │   │   └── *.spec.ts
-│   ├── playwright.config.ts   ← a crear
+│   ├── playwright.config.ts   ← to create
 │   ├── package.json
 │   └── tsconfig.json
 │
@@ -353,7 +353,7 @@ Learning_to_Playwright/
 ├── csharp/
 │   ├── Tests/
 │   │   └── *Test.cs
-│   ├── .runsettings           ← a crear (opcional)
+│   ├── .runsettings           ← to create (optional)
 │   └── PlaywrightComparison.csproj
 │
 └── docs/
@@ -361,9 +361,9 @@ Learning_to_Playwright/
 
 ---
 
-## 🔍 Verificación Rápida del Entorno
+## 🔍 Quick Environment Verification
 
-Antes de escribir el primer test, confirmar que todo está bien ejecutando:
+Before writing your first test, confirm everything is working by running:
 
 ```bash
 # TypeScript
@@ -378,13 +378,13 @@ cd csharp && dotnet test --list-tests
 
 ---
 
-## 📋 Resumen de Comandos por Lenguaje
+## 📋 Command Summary by Language
 
-| Acción | TypeScript | Python | C# |
+| Action | TypeScript | Python | C# |
 | :--- | :--- | :--- | :--- |
-| Instalar paquetes | `npm install -D @playwright/test` | `pip install playwright pytest-playwright` | `dotnet restore` |
-| Instalar browsers | `npx playwright install` | `playwright install` | `pwsh ...playwright.ps1 install` |
-| Ejecutar todos los tests | `npx playwright test` | `pytest` | `dotnet test` |
-| Ejecutar un archivo | `npx playwright test login.spec.ts` | `pytest tests/test_login.py` | `dotnet test --filter Login` |
-| Ver reporte | `npx playwright show-report` | abrir `reports/report.html` | salida en consola / TRX |
-| Modo visual / UI | `npx playwright test --ui` | `pytest --headed` | `.runsettings Headless=false` |
+| Install packages | `npm install -D @playwright/test` | `pip install playwright pytest-playwright` | `dotnet restore` |
+| Install browsers | `npx playwright install` | `playwright install` | `pwsh ...playwright.ps1 install` |
+| Run all tests | `npx playwright test` | `pytest` | `dotnet test` |
+| Run one file | `npx playwright test login.spec.ts` | `pytest tests/test_login.py` | `dotnet test --filter Login` |
+| View report | `npx playwright show-report` | open `reports/report.html` | console output / TRX |
+| Visual / UI mode | `npx playwright test --ui` | `pytest --headed` | `.runsettings Headless=false` |

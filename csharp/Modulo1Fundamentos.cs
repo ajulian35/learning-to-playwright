@@ -1,256 +1,256 @@
 // =============================================================================
-// MÓDULO 1: Fundamentos de Programación con C#
-// Contexto: Mini Bug Tracker - Sistema de gestión de defectos para un QA
-// Cubre: variables/tipos, condicionales, bucles, listas/dicts, funciones,
-//        manejo de excepciones y clases (OOP)
-// Se ejecuta como tests de NUnit para que sea consistente con el proyecto.
+// MODULE 1: Programming Fundamentals with C#
+// Context: Mini Bug Tracker - Defect management system for a QA engineer
+// Covers: variables/types, conditionals, loops, lists/dicts, functions,
+//         exception handling, and classes (OOP)
+// Runs as NUnit tests to stay consistent with the project structure.
 // =============================================================================
 
 namespace PlaywrightComparison;
 
 
 // -----------------------------------------------------------------------------
-// TEMA 1 (OOP): Clase Bug Tracker
-// Incluye: atributos, constructor, métodos de instancia y estáticos
+// TOPIC 1 (OOP): Bug Tracker Class
+// Includes: attributes, constructor, instance and static methods
 // -----------------------------------------------------------------------------
 
 public class BugTracker
 {
-    // TEMA 1: Constantes y tipos de datos
-    public const string NombreProyecto = "Portal de Clientes";
+    // TOPIC 1: Constants and data types
+    public const string ProjectName = "Customer Portal";
     public const double Version = 1.0;
-    public const int MaxBugsPorSprint = 20;
+    public const int MaxBugsPerSprint = 20;
 
-    // TEMA 2: Array — equivalente a tupla de Python (inmutable por convención)
-    public static readonly string[] EstadosPermitidos = ["abierto", "en progreso", "resuelto", "cerrado"];
-    public static readonly string[] SeveridadesValidas = ["crítica", "alta", "media", "baja"];
+    // TOPIC 2: Array — equivalent to Python tuple (immutable by convention)
+    public static readonly string[] AllowedStatuses = ["open", "in progress", "resolved", "closed"];
+    public static readonly string[] ValidSeverities = ["critical", "high", "medium", "low"];
 
-    // Atributo estático de clase (compartido entre instancias)
-    public static int InstanciasCreadas { get; private set; } = 0;
+    // Static class attribute (shared across instances)
+    public static int CreatedInstances { get; private set; } = 0;
 
-    // TEMA 2: List y Dictionary — colección de bugs
+    // TOPIC 2: List and Dictionary — bug collection
     private readonly List<Dictionary<string, string>> _bugs = [];
 
-    // TEMA 2: HashSet — módulos únicos sin duplicados
-    public readonly HashSet<string> ModulosAfectados = [];
+    // TOPIC 2: HashSet — unique modules with no duplicates
+    public readonly HashSet<string> AffectedModules = [];
 
-    private int _proximoId = 1;
+    private int _nextId = 1;
 
-    // Constructor (equivalente a __init__ en Python)
+    // Constructor (equivalent to __init__ in Python)
     public BugTracker()
     {
-        InstanciasCreadas++;
+        CreatedInstances++;
     }
 
     // -------------------------------------------------------------------------
-    // TEMA 3: Métodos con retorno y excepciones
+    // TOPIC 3: Methods with return values and exceptions
     // -------------------------------------------------------------------------
 
-    public Dictionary<string, string> Registrar(string titulo, string severidad, string modulo)
+    public Dictionary<string, string> Register(string title, string severity, string module)
     {
-        if (!SeveridadesValidas.Contains(severidad))
-            throw new ArgumentException($"Severidad '{severidad}' no válida. Use: {string.Join(", ", SeveridadesValidas)}");
+        if (!ValidSeverities.Contains(severity))
+            throw new ArgumentException($"Severity '{severity}' is not valid. Use: {string.Join(", ", ValidSeverities)}");
 
         var bug = new Dictionary<string, string>
         {
-            { "id",        _proximoId.ToString() },
-            { "titulo",    titulo },
-            { "severidad", severidad },
-            { "estado",    "abierto" },
+            { "id",       _nextId.ToString() },
+            { "title",    title },
+            { "severity", severity },
+            { "status",   "open" },
         };
 
         _bugs.Add(bug);
-        ModulosAfectados.Add(modulo);
-        _proximoId++;
+        AffectedModules.Add(module);
+        _nextId++;
         return bug;
     }
 
-    public bool CambiarEstado(int bugId, string nuevoEstado)
+    public bool ChangeStatus(int bugId, string newStatus)
     {
-        if (!EstadosPermitidos.Contains(nuevoEstado))
-            throw new ArgumentException($"Estado '{nuevoEstado}' no permitido.");
+        if (!AllowedStatuses.Contains(newStatus))
+            throw new ArgumentException($"Status '{newStatus}' is not allowed.");
 
-        // TEMA 4: Bucle foreach
+        // TOPIC 4: foreach loop
         foreach (var bug in _bugs)
         {
             if (bug["id"] == bugId.ToString())
             {
-                bug["estado"] = nuevoEstado;
+                bug["status"] = newStatus;
                 return true;
             }
         }
         return false;
     }
 
-    public List<Dictionary<string, string>> ListarPorSeveridad(string severidad) =>
-        _bugs.Where(b => b["severidad"] == severidad).ToList();
+    public List<Dictionary<string, string>> ListBySeverity(string severity) =>
+        _bugs.Where(b => b["severity"] == severity).ToList();
 
     public int Total => _bugs.Count;
 
-    public int Resueltos => _bugs.Count(b => b["estado"] == "resuelto" || b["estado"] == "cerrado");
+    public int Resolved => _bugs.Count(b => b["status"] == "resolved" || b["status"] == "closed");
 
-    public double TasaResolucion => Total > 0 ? Math.Round((double)Resueltos / Total * 100, 2) : 0.0;
+    public double ResolutionRate => Total > 0 ? Math.Round((double)Resolved / Total * 100, 2) : 0.0;
 
-    // Equivalente a __str__ de Python
+    // Equivalent to __str__ in Python
     public override string ToString() =>
-        $"BugTracker[{NombreProyecto} v{Version}] — {Total} bug(s)";
+        $"BugTracker[{ProjectName} v{Version}] — {Total} bug(s)";
 }
 
 
 // =============================================================================
-// DEMO como TestFixture de NUnit
-// Cada [Test] corresponde a un tema del Módulo 1
+// DEMO as NUnit TestFixture
+// Each [Test] corresponds to a topic from Module 1
 // =============================================================================
 
 [TestFixture]
-public class Modulo1BugTrackerTests
+public class Module1BugTrackerTests
 {
     private BugTracker _tracker = null!;
 
     [SetUp]
-    public void Inicializar()
+    public void Setup()
     {
         _tracker = new BugTracker();
     }
 
     // -------------------------------------------------------------------------
-    // TEMA 1: Variables, tipos de datos y operadores
+    // TOPIC 1: Variables, data types, and operators
     // -------------------------------------------------------------------------
     [Test]
-    public void Tema1_VariablesYTipos()
+    public void Topic1_VariablesAndTypes()
     {
         // string, double, int, bool
-        string proyecto = BugTracker.NombreProyecto;
+        string project = BugTracker.ProjectName;
         double version = BugTracker.Version;
-        int maxBugs = BugTracker.MaxBugsPorSprint;
+        int maxBugs = BugTracker.MaxBugsPerSprint;
         bool debugMode = false;
 
-        // Operadores: comparación, aritméticos, lógicos
-        bool dentroDelLimite = maxBugs > 0 && maxBugs <= 50;
-        int bugsPrueba = 4;
-        int slotsDisponibles = maxBugs - bugsPrueba;
+        // Operators: comparison, arithmetic, logical
+        bool withinLimit = maxBugs > 0 && maxBugs <= 50;
+        int testBugs = 4;
+        int availableSlots = maxBugs - testBugs;
 
         Assert.Multiple(() =>
         {
-            Assert.That(proyecto, Is.EqualTo("Portal de Clientes"));
-            Assert.That(version, Is.EqualTo(1.0));
-            Assert.That(dentroDelLimite, Is.True);
-            Assert.That(slotsDisponibles, Is.EqualTo(16));
-            Assert.That(debugMode, Is.False);
+            Assert.That(project,        Is.EqualTo("Customer Portal"));
+            Assert.That(version,        Is.EqualTo(1.0));
+            Assert.That(withinLimit,    Is.True);
+            Assert.That(availableSlots, Is.EqualTo(16));
+            Assert.That(debugMode,      Is.False);
         });
 
-        TestContext.Out.WriteLine($"Proyecto: {proyecto} v{version}");
-        TestContext.Out.WriteLine($"Max bugs: {maxBugs} | Disponibles: {slotsDisponibles}");
+        TestContext.Out.WriteLine($"Project: {project} v{version}");
+        TestContext.Out.WriteLine($"Max bugs: {maxBugs} | Available: {availableSlots}");
     }
 
     // -------------------------------------------------------------------------
-    // TEMA 2: Estructuras de datos — List, Dictionary, HashSet, Array (tupla)
+    // TOPIC 2: Data structures — List, Dictionary, HashSet, Array (tuple)
     // -------------------------------------------------------------------------
     [Test]
-    public void Tema2_EstructurasDeDatos()
+    public void Topic2_DataStructures()
     {
-        // Dictionary — un bug es clave-valor
+        // Dictionary — a bug is key-value data
         var bug = new Dictionary<string, string>
         {
-            { "id",        "1" },
-            { "titulo",    "Login falla" },
-            { "severidad", "crítica" },
-            { "estado",    "abierto" },
+            { "id",       "1" },
+            { "title",    "Login fails" },
+            { "severity", "critical" },
+            { "status",   "open" },
         };
 
-        // List — colección de bugs
-        var listaBugs = new List<Dictionary<string, string>> { bug };
+        // List — bug collection
+        var bugList = new List<Dictionary<string, string>> { bug };
 
-        // Array (constante) — como tupla de Python
-        string[] estados = BugTracker.EstadosPermitidos;
+        // Array (constant) — like Python tuple
+        string[] statuses = BugTracker.AllowedStatuses;
 
-        // HashSet — módulos únicos
-        var modulos = new HashSet<string> { "Auth", "UI", "Auth" }; // "Auth" sólo una vez
+        // HashSet — unique modules
+        var modules = new HashSet<string> { "Auth", "UI", "Auth" }; // "Auth" only once
 
         Assert.Multiple(() =>
         {
-            Assert.That(bug["severidad"], Is.EqualTo("crítica"));
-            Assert.That(listaBugs, Has.Count.EqualTo(1));
-            Assert.That(estados, Has.Length.EqualTo(4));
-            Assert.That(modulos, Has.Count.EqualTo(2));  // sin duplicado
+            Assert.That(bug["severity"], Is.EqualTo("critical"));
+            Assert.That(bugList,         Has.Count.EqualTo(1));
+            Assert.That(statuses,        Has.Length.EqualTo(4));
+            Assert.That(modules,         Has.Count.EqualTo(2));  // no duplicate
         });
 
-        TestContext.Out.WriteLine($"Bug: {bug["titulo"]} ({bug["severidad"]})");
-        TestContext.Out.WriteLine($"Estados: [{string.Join(", ", estados)}]");
-        TestContext.Out.WriteLine($"Módulos únicos: [{string.Join(", ", modulos)}]");
+        TestContext.Out.WriteLine($"Bug: {bug["title"]} ({bug["severity"]})");
+        TestContext.Out.WriteLine($"Statuses: [{string.Join(", ", statuses)}]");
+        TestContext.Out.WriteLine($"Unique modules: [{string.Join(", ", modules)}]");
     }
 
     // -------------------------------------------------------------------------
-    // TEMA 2 (cont.): Condicionales y bucles
+    // TOPIC 2 (cont.): Conditionals and loops
     // -------------------------------------------------------------------------
     [Test]
-    public void Tema2_CondicionalesYBucles()
+    public void Topic2_ConditionalsAndLoops()
     {
-        _tracker.Registrar("Login falla con usuario vacío",  "crítica", "Autenticación");
-        _tracker.Registrar("Botón 'Guardar' no responde",    "alta",    "Formularios");
-        _tracker.Registrar("Texto del footer mal alineado",  "baja",    "UI");
-        _tracker.Registrar("Error al exportar PDF",          "alta",    "Reportes");
+        _tracker.Register("Login fails with empty username", "critical", "Authentication");
+        _tracker.Register("Save button does not respond",    "high",     "Forms");
+        _tracker.Register("Footer text misaligned",          "low",      "UI");
+        _tracker.Register("Error when exporting PDF",        "high",     "Reports");
 
-        // Condicional if/else if/else
-        string mensajeLimite;
+        // if/else if/else conditional
+        string sprintMessage;
         if (_tracker.Total == 0)
-            mensajeLimite = "Sin bugs registrados.";
-        else if (_tracker.Total < BugTracker.MaxBugsPorSprint)
-            mensajeLimite = $"Quedan {BugTracker.MaxBugsPorSprint - _tracker.Total} slots.";
+            sprintMessage = "No bugs registered.";
+        else if (_tracker.Total < BugTracker.MaxBugsPerSprint)
+            sprintMessage = $"{BugTracker.MaxBugsPerSprint - _tracker.Total} slots remaining.";
         else
-            mensajeLimite = "¡Límite del sprint alcanzado!";
+            sprintMessage = "Sprint limit reached!";
 
-        TestContext.Out.WriteLine($"Estado del sprint: {mensajeLimite}");
+        TestContext.Out.WriteLine($"Sprint status: {sprintMessage}");
 
-        // Bucle foreach sobre List
-        TestContext.Out.WriteLine("\nListado de bugs:");
-        foreach (var bug in _tracker.ListarPorSeveridad("alta")
-            .Concat(_tracker.ListarPorSeveridad("crítica")))
+        // foreach loop over List
+        TestContext.Out.WriteLine("\nBug listing:");
+        foreach (var bug in _tracker.ListBySeverity("high")
+            .Concat(_tracker.ListBySeverity("critical")))
         {
-            TestContext.Out.WriteLine($"  #{bug["id"]} | {bug["severidad"],-8} | {bug["titulo"]}");
+            TestContext.Out.WriteLine($"  #{bug["id"]} | {bug["severity"],-8} | {bug["title"]}");
         }
 
-        // Bucle while — resolver bugs críticos
-        var criticos = _tracker.ListarPorSeveridad("crítica");
+        // while loop — resolve critical bugs
+        var critical = _tracker.ListBySeverity("critical");
         int i = 0;
-        while (i < criticos.Count)
+        while (i < critical.Count)
         {
-            _tracker.CambiarEstado(int.Parse(criticos[i]["id"]), "resuelto");
-            TestContext.Out.WriteLine($"  Bug #{criticos[i]["id"]} resuelto.");
+            _tracker.ChangeStatus(int.Parse(critical[i]["id"]), "resolved");
+            TestContext.Out.WriteLine($"  Bug #{critical[i]["id"]} resolved.");
             i++;
         }
 
         Assert.Multiple(() =>
         {
-            Assert.That(_tracker.Resueltos, Is.EqualTo(1));
-            Assert.That(_tracker.TasaResolucion, Is.EqualTo(25.0));
+            Assert.That(_tracker.Resolved,        Is.EqualTo(1));
+            Assert.That(_tracker.ResolutionRate,  Is.EqualTo(25.0));
         });
 
-        TestContext.Out.WriteLine($"Tasa de resolución: {_tracker.TasaResolucion}%");
+        TestContext.Out.WriteLine($"Resolution rate: {_tracker.ResolutionRate}%");
     }
 
     // -------------------------------------------------------------------------
-    // TEMA 3: Funciones / Métodos + manejo de excepciones (try/catch)
+    // TOPIC 3: Methods + exception handling (try/catch)
     // -------------------------------------------------------------------------
     [Test]
-    public void Tema3_MetodosYExcepciones()
+    public void Topic3_MethodsAndExceptions()
     {
-        var entradas = new (string Titulo, string Severidad, string Modulo)[]
+        var entries = new (string Title, string Severity, string Module)[]
         {
-            ("Login falla con usuario vacío",  "crítica", "Autenticación"),
-            ("Botón 'Guardar' no responde",    "alta",    "Formularios"),
-            ("Severidad inválida de prueba",   "urgente", "Test"),   // debe fallar
+            ("Login fails with empty username", "critical", "Authentication"),
+            ("Save button does not respond",    "high",     "Forms"),
+            ("Invalid severity test",           "urgent",   "Test"),   // should fail
         };
 
-        int registradosExitosos = 0;
+        int successfulRegistrations = 0;
 
-        foreach (var (titulo, sev, modulo) in entradas)
+        foreach (var (title, sev, module) in entries)
         {
             try
             {
-                var bug = _tracker.Registrar(titulo, sev, modulo);
-                registradosExitosos++;
-                TestContext.Out.WriteLine($"  [OK] Bug #{bug["id"]}: '{bug["titulo"]}' ({bug["severidad"]})");
+                var bug = _tracker.Register(title, sev, module);
+                successfulRegistrations++;
+                TestContext.Out.WriteLine($"  [OK] Bug #{bug["id"]}: '{bug["title"]}' ({bug["severity"]})");
             }
             catch (ArgumentException ex)
             {
@@ -258,52 +258,52 @@ public class Modulo1BugTrackerTests
             }
         }
 
-        // Solo 2 de 3 debieron registrarse
+        // Only 2 of 3 should have been registered
         Assert.Multiple(() =>
         {
-            Assert.That(registradosExitosos, Is.EqualTo(2));
-            Assert.That(_tracker.Total, Is.EqualTo(2));
+            Assert.That(successfulRegistrations, Is.EqualTo(2));
+            Assert.That(_tracker.Total,          Is.EqualTo(2));
         });
 
-        // CambiarEstado con estado inválido también lanza excepción
-        Assert.Throws<ArgumentException>(() => _tracker.CambiarEstado(1, "pendiente"));
+        // ChangeStatus with invalid status also throws
+        Assert.Throws<ArgumentException>(() => _tracker.ChangeStatus(1, "pending"));
     }
 
     // -------------------------------------------------------------------------
-    // TEMA 4: OOP — Clase, objetos, métodos, atributos
+    // TOPIC 4: OOP — Class, objects, methods, attributes
     // -------------------------------------------------------------------------
     [Test]
-    public void Tema4_OOP_ClasesYObjetos()
+    public void Topic4_OOP_ClassesAndObjects()
     {
-        // Creación de objetos (instancias)
+        // Object creation (instances)
         var tracker1 = new BugTracker();
         var tracker2 = new BugTracker();
 
-        // Métodos de instancia
-        tracker1.Registrar("Crash al iniciar sesión",    "crítica", "Login");
-        tracker1.Registrar("Imagen no carga en perfil",  "media",   "Perfil");
-        tracker2.Registrar("Tiempo de carga excesivo",   "alta",    "Dashboard");
+        // Instance methods
+        tracker1.Register("App crashes on login",       "critical", "Login");
+        tracker1.Register("Profile image not loading",  "medium",   "Profile");
+        tracker2.Register("Excessive load time",        "high",     "Dashboard");
 
         Assert.Multiple(() =>
         {
-            // Cada objeto tiene su propio estado
+            // Each object has its own state
             Assert.That(tracker1.Total, Is.EqualTo(2));
             Assert.That(tracker2.Total, Is.EqualTo(1));
 
-            // Atributo estático de clase — compartido entre instancias
-            Assert.That(BugTracker.InstanciasCreadas, Is.GreaterThanOrEqualTo(2));
+            // Static class attribute — shared across instances
+            Assert.That(BugTracker.CreatedInstances, Is.GreaterThanOrEqualTo(2));
 
-            // HashSet en objeto
-            Assert.That(tracker1.ModulosAfectados, Contains.Item("Login"));
-            Assert.That(tracker1.ModulosAfectados, Contains.Item("Perfil"));
+            // HashSet in object
+            Assert.That(tracker1.AffectedModules, Contains.Item("Login"));
+            Assert.That(tracker1.AffectedModules, Contains.Item("Profile"));
 
-            // ToString (equivalente a __str__)
-            Assert.That(tracker1.ToString(), Does.Contain("Portal de Clientes"));
+            // ToString (equivalent to __str__)
+            Assert.That(tracker1.ToString(), Does.Contain("Customer Portal"));
         });
 
         TestContext.Out.WriteLine($"tracker1: {tracker1}");
         TestContext.Out.WriteLine($"tracker2: {tracker2}");
-        TestContext.Out.WriteLine($"Bugs críticos tracker1: {tracker1.ListarPorSeveridad("crítica").Count}");
-        TestContext.Out.WriteLine($"Módulos afectados tracker1: [{string.Join(", ", tracker1.ModulosAfectados)}]");
+        TestContext.Out.WriteLine($"Critical bugs tracker1: {tracker1.ListBySeverity("critical").Count}");
+        TestContext.Out.WriteLine($"Affected modules tracker1: [{string.Join(", ", tracker1.AffectedModules)}]");
     }
 }

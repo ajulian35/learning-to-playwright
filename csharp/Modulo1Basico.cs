@@ -1,5 +1,5 @@
 // =============================================================================
-// MÓDULO 1 — Ejemplo Básico: Reporte de Resultados de Pruebas
+// MODULE 1 — Basic Example: Test Results Report
 // =============================================================================
 
 namespace PlaywrightComparison;
@@ -7,72 +7,72 @@ namespace PlaywrightComparison;
 [TestFixture]
 public class Modulo1BasicoTests
 {
-    // --- TEMA 1: Variables y tipos de datos ---
-    private const string Suite   = "Registro de Usuario";
+    // --- TOPIC 1: Variables and data types ---
+    private const string Suite   = "User Registration";
     private const string Version = "1.0";
 
-    // --- TEMA 2: Estructuras de datos ---
+    // --- TOPIC 2: Data structures ---
 
-    // Array: estados válidos (no cambia — equivalente a tupla de Python)
-    private static readonly string[] EstadosValidos = ["PASSED", "FAILED", "SKIPPED"];
+    // Array: valid statuses (immutable — equivalent to Python tuple)
+    private static readonly string[] ValidStates = ["PASSED", "FAILED", "SKIPPED"];
 
-    // Lista de diccionarios: cada caso de prueba
-    private static readonly List<Dictionary<string, string>> Casos =
+    // List of dicts: each test case
+    private static readonly List<Dictionary<string, string>> Cases =
     [
-        new() { {"nombre", "Registro con datos válidos"},      {"estado", "PASSED"  } },
-        new() { {"nombre", "Registro sin correo"},             {"estado", "FAILED"  } },
-        new() { {"nombre", "Registro con contraseña corta"},   {"estado", "FAILED"  } },
-        new() { {"nombre", "Registro con usuario duplicado"},  {"estado", "PASSED"  } },
-        new() { {"nombre", "Registro desde mobile"},           {"estado", "SKIPPED" } },
+        new() { {"name", "Registration with valid data"},      {"status", "PASSED"  } },
+        new() { {"name", "Registration without email"},        {"status", "FAILED"  } },
+        new() { {"name", "Registration with short password"},  {"status", "FAILED"  } },
+        new() { {"name", "Registration with duplicate user"},  {"status", "PASSED"  } },
+        new() { {"name", "Registration from mobile"},          {"status", "SKIPPED" } },
     ];
 
 
-    // --- TEMA 3: Métodos (equivalente a funciones de Python) ---
+    // --- TOPIC 3: Methods (equivalent to Python functions) ---
 
-    private static string ImprimirResultado(string nombre, string estado)
+    private static string PrintResult(string name, string status)
     {
-        if (estado == "PASSED")
-            return $"  [OK]      {nombre}";
-        else if (estado == "FAILED")
-            return $"  [FALLO]   {nombre}  <- FALLO DETECTADO";
+        if (status == "PASSED")
+            return $"  [OK]      {name}";
+        else if (status == "FAILED")
+            return $"  [FAIL]    {name}  <- FAILURE DETECTED";
         else
-            return $"  [OMITIDO] {nombre}";
+            return $"  [SKIP]    {name}";
     }
 
-    private static Dictionary<string, int> CalcularResumen(List<Dictionary<string, string>> casos)
+    private static Dictionary<string, int> CalculateSummary(List<Dictionary<string, string>> cases)
     {
-        int passed  = casos.Count(c => c["estado"] == "PASSED");
-        int failed  = casos.Count(c => c["estado"] == "FAILED");
-        int skipped = casos.Count(c => c["estado"] == "SKIPPED");
+        int passed  = cases.Count(c => c["status"] == "PASSED");
+        int failed  = cases.Count(c => c["status"] == "FAILED");
+        int skipped = cases.Count(c => c["status"] == "SKIPPED");
         int total   = passed + failed;
-        int tasa    = total > 0 ? (int)Math.Round((double)passed / total * 100) : 0;
-        return new() { {"passed", passed}, {"failed", failed}, {"skipped", skipped}, {"tasa", tasa} };
+        int rate    = total > 0 ? (int)Math.Round((double)passed / total * 100) : 0;
+        return new() { {"passed", passed}, {"failed", failed}, {"skipped", skipped}, {"rate", rate} };
     }
 
 
-    // --- TEMA 4: Manejo de excepciones ---
+    // --- TOPIC 4: Exception handling ---
 
-    private static void ValidarEstado(string estado)
+    private static void ValidateStatus(string status)
     {
-        if (!EstadosValidos.Contains(estado))
-            throw new ArgumentException($"Estado '{estado}' no reconocido. Use: {string.Join(", ", EstadosValidos)}");
+        if (!ValidStates.Contains(status))
+            throw new ArgumentException($"Status '{status}' not recognized. Use: {string.Join(", ", ValidStates)}");
     }
 
 
-    // --- TEMA 5: Clase básica (OOP) ---
+    // --- TOPIC 5: Basic class (OOP) ---
 
-    private class ReportePruebas
+    private class TestReport
     {
         private readonly string _suite;
         private readonly string _version;
 
-        public ReportePruebas(string suite, string version)
+        public TestReport(string suite, string version)
         {
             _suite   = suite;
             _version = version;
         }
 
-        public void ImprimirEncabezado()
+        public void PrintHeader()
         {
             TestContext.Out.WriteLine(new string('=', 50));
             TestContext.Out.WriteLine($"  Suite  : {_suite}");
@@ -80,136 +80,136 @@ public class Modulo1BasicoTests
             TestContext.Out.WriteLine(new string('=', 50));
         }
 
-        public void ImprimirPie(Dictionary<string, int> resumen)
+        public void PrintFooter(Dictionary<string, int> summary)
         {
             TestContext.Out.WriteLine(new string('-', 50));
-            TestContext.Out.WriteLine($"  PASSED : {resumen["passed"]}");
-            TestContext.Out.WriteLine($"  FAILED : {resumen["failed"]}");
-            TestContext.Out.WriteLine($"  SKIPPED: {resumen["skipped"]}");
-            TestContext.Out.WriteLine($"  Tasa de exito: {resumen["tasa"]}%");
+            TestContext.Out.WriteLine($"  PASSED : {summary["passed"]}");
+            TestContext.Out.WriteLine($"  FAILED : {summary["failed"]}");
+            TestContext.Out.WriteLine($"  SKIPPED: {summary["skipped"]}");
+            TestContext.Out.WriteLine($"  Success rate: {summary["rate"]}%");
             TestContext.Out.WriteLine(new string('=', 50));
         }
     }
 
 
     // =========================================================================
-    // Tests — cada uno demuestra un tema del Módulo 1
+    // Tests — each one demonstrates a topic from Module 1
     // =========================================================================
 
     [Test]
-    public void Tema1_VariablesYTipos()
+    public void Topic1_VariablesAndTypes()
     {
         string suite   = Suite;
         string version = Version;
-        int totalCasos = Casos.Count;
-        bool hayFallos = false;
+        int totalCases = Cases.Count;
+        bool hasFailures = false;
 
         Assert.Multiple(() =>
         {
-            Assert.That(suite,      Is.EqualTo("Registro de Usuario"));
-            Assert.That(version,    Is.EqualTo("1.0"));
-            Assert.That(totalCasos, Is.EqualTo(5));
-            Assert.That(hayFallos,  Is.False);
+            Assert.That(suite,       Is.EqualTo("User Registration"));
+            Assert.That(version,     Is.EqualTo("1.0"));
+            Assert.That(totalCases,  Is.EqualTo(5));
+            Assert.That(hasFailures, Is.False);
         });
 
-        TestContext.Out.WriteLine($"Suite: {suite} | Version: {version} | Casos: {totalCasos}");
+        TestContext.Out.WriteLine($"Suite: {suite} | Version: {version} | Cases: {totalCases}");
     }
 
     [Test]
-    public void Tema2_EstructurasDeDatos()
+    public void Topic2_DataStructures()
     {
-        // Array (tupla): acceso por índice, longitud fija
-        string primerEstado = EstadosValidos[0];
-        int cantidadEstados = EstadosValidos.Length;
+        // Array (tuple): access by index, fixed length
+        string firstStatus  = ValidStates[0];
+        int statusCount     = ValidStates.Length;
 
-        // Lista de diccionarios: acceso por clave
-        string nombrePrimerCaso = Casos[0]["nombre"];
-        string estadoPrimerCaso = Casos[0]["estado"];
+        // List of dicts: access by key
+        string firstCaseName   = Cases[0]["name"];
+        string firstCaseStatus = Cases[0]["status"];
 
         Assert.Multiple(() =>
         {
-            Assert.That(primerEstado,    Is.EqualTo("PASSED"));
-            Assert.That(cantidadEstados, Is.EqualTo(3));
-            Assert.That(nombrePrimerCaso, Does.Contain("válidos"));
-            Assert.That(estadoPrimerCaso, Is.EqualTo("PASSED"));
+            Assert.That(firstStatus,     Is.EqualTo("PASSED"));
+            Assert.That(statusCount,     Is.EqualTo(3));
+            Assert.That(firstCaseName,   Does.Contain("valid"));
+            Assert.That(firstCaseStatus, Is.EqualTo("PASSED"));
         });
 
-        TestContext.Out.WriteLine($"Estados validos: [{string.Join(", ", EstadosValidos)}]");
-        TestContext.Out.WriteLine($"Primer caso: {nombrePrimerCaso} -> {estadoPrimerCaso}");
+        TestContext.Out.WriteLine($"Valid statuses: [{string.Join(", ", ValidStates)}]");
+        TestContext.Out.WriteLine($"First case: {firstCaseName} -> {firstCaseStatus}");
     }
 
     [Test]
-    public void Tema2_CondicionalesYBucles()
+    public void Topic2_ConditionalsAndLoops()
     {
-        bool hayFallos = false;
-        int totalEjecutados = 0;
+        bool hasFailures = false;
+        int totalExecuted = 0;
 
-        // Bucle foreach + condicional
-        foreach (var caso in Casos)
+        // foreach loop + conditional
+        foreach (var c in Cases)
         {
-            string mensaje = ImprimirResultado(caso["nombre"], caso["estado"]);
-            TestContext.Out.WriteLine(mensaje);
-            totalEjecutados++;
+            string message = PrintResult(c["name"], c["status"]);
+            TestContext.Out.WriteLine(message);
+            totalExecuted++;
 
-            if (caso["estado"] == "FAILED")
-                hayFallos = true;
+            if (c["status"] == "FAILED")
+                hasFailures = true;
         }
 
-        Assert.That(hayFallos,        Is.True);
-        Assert.That(totalEjecutados,  Is.EqualTo(5));
+        Assert.That(hasFailures,   Is.True);
+        Assert.That(totalExecuted, Is.EqualTo(5));
 
-        // Condicional para mensaje final
-        string mensajeFinal = hayFallos
-            ? "[ATENCION] Hay casos fallidos. Revisar antes de liberar."
-            : "[OK] Todo en orden.";
+        // conditional for final message
+        string finalMessage = hasFailures
+            ? "[WARNING] There are failed cases. Review before releasing."
+            : "[OK] All clear.";
 
-        TestContext.Out.WriteLine(mensajeFinal);
+        TestContext.Out.WriteLine(finalMessage);
     }
 
     [Test]
-    public void Tema3_MetodosYExcepciones()
+    public void Topic3_MethodsAndExceptions()
     {
-        // Estado válido — no lanza excepción
-        Assert.DoesNotThrow(() => ValidarEstado("PASSED"));
+        // valid status — does not throw
+        Assert.DoesNotThrow(() => ValidateStatus("PASSED"));
 
-        // Estado inválido — lanza ArgumentException
-        var ex = Assert.Throws<ArgumentException>(() => ValidarEstado("PENDIENTE"));
-        Assert.That(ex!.Message, Does.Contain("PENDIENTE"));
+        // invalid status — throws ArgumentException
+        var ex = Assert.Throws<ArgumentException>(() => ValidateStatus("PENDING"));
+        Assert.That(ex!.Message, Does.Contain("PENDING"));
 
-        TestContext.Out.WriteLine($"Excepcion capturada: {ex.Message}");
+        TestContext.Out.WriteLine($"Exception caught: {ex.Message}");
     }
 
     [Test]
-    public void Tema4_ResumenConMetodos()
+    public void Topic4_SummaryWithMethods()
     {
-        var resumen = CalcularResumen(Casos);
+        var summary = CalculateSummary(Cases);
 
         Assert.Multiple(() =>
         {
-            Assert.That(resumen["passed"],  Is.EqualTo(2));
-            Assert.That(resumen["failed"],  Is.EqualTo(2));
-            Assert.That(resumen["skipped"], Is.EqualTo(1));
-            Assert.That(resumen["tasa"],    Is.EqualTo(50));
+            Assert.That(summary["passed"],  Is.EqualTo(2));
+            Assert.That(summary["failed"],  Is.EqualTo(2));
+            Assert.That(summary["skipped"], Is.EqualTo(1));
+            Assert.That(summary["rate"],    Is.EqualTo(50));
         });
 
-        TestContext.Out.WriteLine($"Passed: {resumen["passed"]} | Failed: {resumen["failed"]} | Tasa: {resumen["tasa"]}%");
+        TestContext.Out.WriteLine($"Passed: {summary["passed"]} | Failed: {summary["failed"]} | Rate: {summary["rate"]}%");
     }
 
     [Test]
-    public void Tema5_OOP_ClaseReporte()
+    public void Topic5_OOP_TestReportClass()
     {
-        var reporte = new ReportePruebas(Suite, Version);
-        var resumen = CalcularResumen(Casos);
+        var report  = new TestReport(Suite, Version);
+        var summary = CalculateSummary(Cases);
 
-        // Ejecuta el flujo completo usando la clase
-        reporte.ImprimirEncabezado();
+        // run the full flow using the class
+        report.PrintHeader();
 
-        foreach (var caso in Casos)
+        foreach (var c in Cases)
         {
             try
             {
-                ValidarEstado(caso["estado"]);
-                TestContext.Out.WriteLine(ImprimirResultado(caso["nombre"], caso["estado"]));
+                ValidateStatus(c["status"]);
+                TestContext.Out.WriteLine(PrintResult(c["name"], c["status"]));
             }
             catch (ArgumentException ex)
             {
@@ -217,8 +217,8 @@ public class Modulo1BasicoTests
             }
         }
 
-        reporte.ImprimirPie(resumen);
+        report.PrintFooter(summary);
 
-        Assert.That(resumen["tasa"], Is.EqualTo(50));
+        Assert.That(summary["rate"], Is.EqualTo(50));
     }
 }

@@ -1,48 +1,74 @@
 # Learning to Playwright
 
-Plan de capacitación de QA Manual a QA Automation.
-Mismos escenarios implementados en **Python**, **C#** y **TypeScript**.
+Training plan: from Manual/Functional QA to QA Automation.
+Same scenarios implemented in **Python**, **C#**, and **TypeScript**.
 
 ---
 
-## Estructura
+## Structure
 
 ```
 Learning_to_Playwright/
-├── python/                        # Playwright + pytest
+├── .env                               # Global credentials (not committed)
+│
+├── python/                            # Playwright + pytest
+│   ├── pages/
+│   │   ├── __init__.py
+│   │   ├── login_page.py
+│   │   └── admin_page.py
 │   ├── tests/
-│   │   ├── conftest.py
+│   │   ├── conftest.py                # Fixtures: credentials, login_page, admin_page
+│   │   ├── test_search_admin.py       # E2E test with POM
 │   │   └── test_example.py
-│   ├── modulo1_basico.py          # Ejemplo básico Módulo 1
-│   ├── modulo1_basico_flujo.md    # Explicación del flujo
-│   ├── modulo1_fundamentos.py     # Ejemplo completo Módulo 1
+│   ├── modulo1_basico.py
+│   ├── modulo1_basico_flujo.md
+│   ├── modulo1_fundamentos.py
 │   ├── requirements.txt
 │   └── pytest.ini
 │
-├── csharp/                        # Playwright + NUnit (.NET)
+├── csharp/                            # Playwright + NUnit (.NET 9)
+│   ├── Pages/
+│   │   ├── LoginPage.cs
+│   │   └── AdminPage.cs
 │   ├── Tests/
+│   │   ├── BaseTest.cs                # Loads .env, baseURL, and RequireEnv
+│   │   ├── SearchAdminTests.cs        # E2E test with POM
 │   │   └── ExampleTests.cs
-│   ├── Modulo1Basico.cs           # Ejemplo básico Módulo 1
-│   ├── Modulo1Basico_flujo.md     # Explicación del flujo
-│   ├── Modulo1Fundamentos.cs      # Ejemplo completo Módulo 1
+│   ├── Modulo1Basico.cs
+│   ├── Modulo1Basico_flujo.md
+│   ├── Modulo1Fundamentos.cs
 │   ├── PlaywrightComparison.csproj
 │   └── .runsettings
 │
-├── typescript/                    # Playwright + Jest
-│   ├── modulo1_basico.ts          # Ejemplo básico Módulo 1 (script)
-│   ├── modulo1_basico.test.ts     # Tests con Jest Módulo 1
-│   ├── Modulo1Basico_flujo.md     # Explicación del flujo
-│   ├── jest.config.js
+├── typescript/                        # Playwright + TypeScript
+│   ├── pages/
+│   │   ├── LoginPage.ts
+│   │   └── AdminPage.ts
+│   ├── tests/
+│   │   ├── fixtures.ts                # Fixtures: credentials, loginPage, adminPage
+│   │   └── search_admin.test.ts       # E2E test with POM
+│   ├── modulo1_basico.ts
+│   ├── modulo1_basico.test.ts
+│   ├── Modulo1Basico_flujo.md
+│   ├── playwright.config.ts
 │   ├── tsconfig.json
+│   ├── tsconfig.playwright.json
 │   └── package.json
 │
-├── plan.md                        # Plan de capacitación completo
+├── plan.md
 └── README.md
 ```
 
 ---
 
-## Configuración inicial
+## Initial Setup
+
+### Create the `.env` file at the repo root
+
+```
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin123
+```
 
 ### Python
 
@@ -56,7 +82,7 @@ playwright install
 
 ```bash
 cd csharp
-dotnet build
+dotnet restore
 pwsh bin/Debug/net9.0/playwright.ps1 install
 ```
 
@@ -65,11 +91,66 @@ pwsh bin/Debug/net9.0/playwright.ps1 install
 ```bash
 cd typescript
 npm install
+npx playwright install
 ```
 
 ---
 
-## Ejecutar los ejemplos del Módulo 1
+## Running E2E Tests (POM)
+
+### Python
+
+```bash
+cd python
+
+# Headless (default)
+python -m pytest tests/test_search_admin.py -v
+
+# With visible browser
+python -m pytest tests/test_search_admin.py -v --headed
+
+# With visible browser and action delay
+python -m pytest tests/test_search_admin.py -v --headed --slowmo 500
+```
+
+### C#
+
+```bash
+cd csharp
+
+# Headless (default per .runsettings)
+dotnet test --settings .runsettings
+
+# POM test only
+dotnet test --settings .runsettings --filter "SearchAdminTests"
+
+# With visible browser: edit .runsettings → <Headless>false</Headless>
+```
+
+### TypeScript
+
+```bash
+cd typescript
+
+# Headless (default)
+npx playwright test
+
+# With visible browser
+npx playwright test --headed
+
+# With visible browser and action delay
+npx playwright test --headed --slowmo 500
+
+# POM test only
+npx playwright test tests/search_admin.test.ts
+
+# View HTML report from last run
+npx playwright show-report
+```
+
+---
+
+## Running Module 1 Examples
 
 ### Python
 
@@ -87,45 +168,14 @@ npm start
 
 ---
 
-## Ejecutar los tests
+## Modules
 
-### Python
-
-```bash
-cd python
-pytest
-```
-
-### C#
-
-```bash
-cd csharp
-dotnet test --settings .runsettings
-
-# Solo Módulo 1
-dotnet test --filter "Modulo1Basico"
-```
-
-### TypeScript
-
-```bash
-cd typescript
-npm test
-
-# Solo un tema específico
-npm test -- --testNamePattern "Tema3"
-```
-
----
-
-## Módulos
-
-| Módulo | Descripción | Horas |
+| Module | Description | Hours |
 |---|---|:---:|
-| **Módulo 1** | Fundamentos de Programación con Python | 1 h |
-| **Módulo 2** | Automatización de UI con Playwright | 4.5 h |
-| **Módulo 3** | Automatización de Pruebas de API | 3 h |
-| **Módulo 4** | Inteligencia Artificial en QA | 5 h |
-| **Módulo 5** | Fundamentos de ETL para QA | 6 h |
-| **Módulo 6** | Proyecto Final Integrador | 22 h |
+| **Module 1** | Programming Fundamentals with Python | 1 h |
+| **Module 2** | UI Automation with Playwright | 4.5 h |
+| **Module 3** | API Test Automation | 3 h |
+| **Module 4** | Artificial Intelligence in QA | 5 h |
+| **Module 5** | ETL Fundamentals for QA | 6 h |
+| **Module 6** | Final Integration Project | 22 h |
 | **Total** | | **41.5 h** |

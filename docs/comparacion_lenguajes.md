@@ -1,29 +1,29 @@
-# Comparación de Sintaxis: Python vs C# vs TypeScript
+# Syntax Comparison: Python vs C# vs TypeScript
 
 ---
 
-## Imprimir en consola
+## Print to console
 
 | | Python | C# | TypeScript |
 |---|---|---|---|
-| Comando | `print()` | `Console.WriteLine()` | `console.log()` |
+| Command | `print()` | `Console.WriteLine()` | `console.log()` |
 
 ```python
 # Python
-print("Hola QA")
-print(f"Resultado: {estado}")
+print("Hello QA")
+print(f"Result: {status}")
 ```
 
 ```csharp
 // C#
-Console.WriteLine("Hola QA");
-Console.WriteLine($"Resultado: {estado}");
+Console.WriteLine("Hello QA");
+Console.WriteLine($"Result: {status}");
 ```
 
 ```typescript
 // TypeScript
-console.log("Hola QA");
-console.log(`Resultado: ${estado}`);
+console.log("Hello QA");
+console.log(`Result: ${status}`);
 ```
 
 ---
@@ -32,44 +32,44 @@ console.log(`Resultado: ${estado}`);
 
 ```python
 # Python
-estado = "FAILED"
+status = "FAILED"
 
-if estado == "PASSED":
-    print("Test exitoso")
-elif estado == "FAILED":
-    print("Test fallido")
+if status == "PASSED":
+    print("Test passed")
+elif status == "FAILED":
+    print("Test failed")
 else:
-    print("Test omitido")
+    print("Test skipped")
 ```
 
 ```csharp
 // C#
-string estado = "FAILED";
+string status = "FAILED";
 
-if (estado == "PASSED")
-    Console.WriteLine("Test exitoso");
-else if (estado == "FAILED")
-    Console.WriteLine("Test fallido");
+if (status == "PASSED")
+    Console.WriteLine("Test passed");
+else if (status == "FAILED")
+    Console.WriteLine("Test failed");
 else
-    Console.WriteLine("Test omitido");
+    Console.WriteLine("Test skipped");
 ```
 
 ```typescript
 // TypeScript
-const estado = "FAILED";
+const status = "FAILED";
 
-if (estado === "PASSED")
-    console.log("Test exitoso");
-else if (estado === "FAILED")
-    console.log("Test fallido");
+if (status === "PASSED")
+    console.log("Test passed");
+else if (status === "FAILED")
+    console.log("Test failed");
 else
-    console.log("Test omitido");
+    console.log("Test skipped");
 ```
 
-> **Diferencias clave:**
-> - Python usa `elif`, C# y TypeScript usan `else if`
-> - C# y TypeScript requieren paréntesis `()` en la condición
-> - TypeScript usa `===` (comparación estricta de tipo y valor)
+> **Key differences:**
+> - Python uses `elif`, C# and TypeScript use `else if`
+> - C# and TypeScript require parentheses `()` around the condition
+> - TypeScript uses `===` (strict type and value comparison)
 
 ---
 
@@ -77,83 +77,83 @@ else
 
 ```python
 # Python — for...in
-casos = ["Login", "Registro", "Logout"]
+cases = ["Login", "Registration", "Logout"]
 
-for caso in casos:
-    print(caso)
+for case in cases:
+    print(case)
 ```
 
 ```csharp
 // C# — foreach
-string[] casos = { "Login", "Registro", "Logout" };
+string[] cases = { "Login", "Registration", "Logout" };
 
-foreach (string caso in casos)
-    Console.WriteLine(caso);
+foreach (string c in cases)
+    Console.WriteLine(c);
 ```
 
 ```typescript
 // TypeScript — for...of
-const casos = ["Login", "Registro", "Logout"];
+const cases = ["Login", "Registration", "Logout"];
 
-for (const caso of casos) {
-    console.log(caso);
+for (const c of cases) {
+    console.log(c);
 }
 ```
 
-> **Diferencias clave:**
-> - Python: `for x in lista`
-> - C#: `foreach (tipo x in lista)`
-> - TypeScript: `for (const x of lista)`
+> **Key differences:**
+> - Python: `for x in list`
+> - C#: `foreach (type x in list)`
+> - TypeScript: `for (const x of list)`
 
 ---
 
-## Función
+## Function
 
 ```python
 # Python
-def saludar(nombre: str) -> str:
-    return f"Hola, {nombre}"
+def greet(name: str) -> str:
+    return f"Hello, {name}"
 
-resultado = saludar("QA")
-print(resultado)
+result = greet("QA")
+print(result)
 ```
 
 ```csharp
 // C#
-string Saludar(string nombre)
+string Greet(string name)
 {
-    return $"Hola, {nombre}";
+    return $"Hello, {name}";
 }
 
-string resultado = Saludar("QA");
-Console.WriteLine(resultado);
+string result = Greet("QA");
+Console.WriteLine(result);
 ```
 
 ```typescript
 // TypeScript
-function saludar(nombre: string): string {
-    return `Hola, ${nombre}`;
+function greet(name: string): string {
+    return `Hello, ${name}`;
 }
 
-const resultado = saludar("QA");
-console.log(resultado);
+const result = greet("QA");
+console.log(result);
 ```
 
-> **Diferencias clave:**
-> - Python usa la palabra clave `def`
-> - C# y TypeScript declaran el tipo de retorno (antes del nombre en C#, después en TypeScript)
-> - Python y TypeScript son case-sensitive en nombres por convención (`saludar`), C# usa PascalCase (`Saludar`)
+> **Key differences:**
+> - Python uses the `def` keyword
+> - C# and TypeScript declare the return type (before the name in C#, after in TypeScript)
+> - Python and TypeScript use camelCase by convention (`greet`), C# uses PascalCase (`Greet`)
 
 ---
 
-## Resumen visual
+## Visual summary
 
-| Concepto | Python | C# | TypeScript |
+| Concept | Python | C# | TypeScript |
 |---|---|---|---|
-| Imprimir | `print("texto")` | `Console.WriteLine("texto")` | `console.log("texto")` |
-| Texto con variable | `f"Hola {nombre}"` | `$"Hola {nombre}"` | `` `Hola ${nombre}` `` |
+| Print | `print("text")` | `Console.WriteLine("text")` | `console.log("text")` |
+| Text with variable | `f"Hello {name}"` | `$"Hello {name}"` | `` `Hello ${name}` `` |
 | if / else if | `if` / `elif` / `else` | `if` / `else if` / `else` | `if` / `else if` / `else` |
-| Comparación | `==` | `==` | `===` |
-| Bucle lista | `for x in lista` | `foreach (T x in lista)` | `for (const x of lista)` |
-| Función | `def nombre():` | `Tipo Nombre()` | `function nombre():` |
-| Tipo de retorno | `-> tipo` (opcional) | antes del nombre | `: tipo` después del nombre |
+| Comparison | `==` | `==` | `===` |
+| List loop | `for x in list` | `foreach (T x in list)` | `for (const x of list)` |
+| Function | `def name():` | `Type Name()` | `function name():` |
+| Return type | `-> type` (optional) | before the name | `: type` after the name |

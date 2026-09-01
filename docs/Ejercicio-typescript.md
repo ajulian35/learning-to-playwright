@@ -1,37 +1,37 @@
 # Playwright TypeScript - E2E Testing Framework (POM)
 
-## Requisitos previos
+## Prerequisites
 
 - Node.js 18+
 - npm
 
 ---
 
-## Instalación
+## Installation
 
-### 1. Inicializar el proyecto
+### 1. Initialize the project
 
 ```bash
 npm init -y
 ```
 
-### 2. Instalar dependencias
+### 2. Install dependencies
 
 ```bash
 npm install --save-dev @playwright/test typescript ts-node
 ```
 
-### 3. Instalar los navegadores
+### 3. Install browsers
 
 ```bash
 npx playwright install
 ```
 
-Esto descarga Chromium, Firefox y WebKit en `%LOCALAPPDATA%\ms-playwright\` (solo informativo).
+Downloads Chromium, Firefox, and WebKit to `%LOCALAPPDATA%\ms-playwright\` (informational only).
 
-### 4. Crear el archivo `tsconfig.json`
+### 4. Create `tsconfig.json`
 
-Crea el archivo `tsconfig.json` en la raíz del proyecto con el siguiente contenido:
+Create `tsconfig.json` at the project root:
 
 ```json
 {
@@ -47,11 +47,11 @@ Crea el archivo `tsconfig.json` en la raíz del proyecto con el siguiente conten
 }
 ```
 
-> No uses `npx tsc --init` — genera una configuración con `verbatimModuleSyntax` y `module: nodenext` que es incompatible con Playwright sin configuración adicional.
+> Do not use `npx tsc --init` — it generates a config with `verbatimModuleSyntax` and `module: nodenext` that is incompatible with Playwright without additional configuration.
 
-### 5. Configurar Playwright
+### 5. Configure Playwright
 
-Crea o ajusta el archivo `playwright.config.ts` en la raíz del proyecto:
+Create or update `playwright.config.ts` at the project root:
 
 ```ts
 import { defineConfig } from '@playwright/test';
@@ -67,36 +67,39 @@ export default defineConfig({
 
 ---
 
-### 6. Estructura del proyecto (POM)
+### 6. Project structure (POM)
 
 ```
 playwright_typescript/
 ├── pages/              # Page Object Models
 │   └── LoginPage.ts
-├── tests/              # Archivos de prueba
+├── tests/              # Test files
 │   └── login.spec.ts
 ├── playwright.config.ts
 ├── tsconfig.json
 └── package.json
 ```
 
-
-
-## Crear un nuevo record
-npx playwright codegen
-
-## Crear un test con el codigo guardado
-Guardarlo en la carpeta ./test con el nombre <nombre>.test.ts
-
-## Ejecución de pruebas
+## Record a new test
 
 ```bash
-# Ejecutar todos los tests
+npx playwright codegen
+```
+
+## Save a recorded test
+
+Save it in the `./tests` folder with the name `<name>.test.ts`.
+
+## Running tests
+
+```bash
+# Run all tests
 npx playwright test
+```
 
 ---
 
-## Instalación desde package.json existente
+## Install from existing package.json
 
 ```bash
 npm install
@@ -105,13 +108,13 @@ npx playwright install
 
 ---
 
-## Convertir un test a formato POM
+## Convert a test to POM format
 
-El patrón POM (Page Object Model) separa la lógica de interacción con la UI en clases reutilizables, dejando los tests limpios y enfocados en la lógica de negocio.
+The POM (Page Object Model) pattern separates UI interaction logic into reusable classes, keeping tests clean and focused on business logic.
 
-### Ejemplo: `tests/search_admin.test.ts`
+### Example: `tests/search_admin.test.ts`
 
-#### Paso 1 — Crear la carpeta `pages/`
+#### Step 1 — Create the `pages/` folder
 
 ```
 playwright_typescript/
@@ -120,9 +123,9 @@ playwright_typescript/
 │   └── search_admin.test.ts
 ```
 
-#### Paso 2 — Crear `pages/LoginPage.ts`
+#### Step 2 — Create `pages/LoginPage.ts`
 
-Encapsula todas las acciones de la pantalla de login:
+Encapsulates all actions on the login screen:
 
 ```ts
 import { Page } from '@playwright/test';
@@ -142,9 +145,9 @@ export class LoginPage {
 }
 ```
 
-#### Paso 3 — Crear `pages/AdminPage.ts`
+#### Step 3 — Create `pages/AdminPage.ts`
 
-Encapsula las acciones del módulo Admin:
+Encapsulates actions for the Admin module:
 
 ```ts
 import { Page, expect } from '@playwright/test';
@@ -166,19 +169,19 @@ export class AdminPage {
   }
 
   async verifyResultsFound() {
-    await expect(this.page.locator('#app')).toContainText('Records Found');
+    await expect(this.page.locator('#app')).toContainText('Record Found');
   }
 }
 ```
 
-#### Paso 4 — Reescribir `tests/search_admin.test.ts`
+#### Step 4 — Rewrite `tests/search_admin.test.ts`
 
 ```ts
 import { test } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { AdminPage } from '../pages/AdminPage';
 
-test('Buscar administradores por rol Admin', async ({ page }) => {
+test('Search admin users by Admin role', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const adminPage = new AdminPage(page);
 
@@ -192,7 +195,7 @@ test('Buscar administradores por rol Admin', async ({ page }) => {
 });
 ```
 
-#### Estructura final
+#### Final structure
 
 ```
 playwright_typescript/

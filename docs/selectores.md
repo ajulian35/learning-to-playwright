@@ -1,309 +1,309 @@
-# Estrategia de Localizadores en Automatización de UI y Comparativa en Playwright
+# Locator Strategy in UI Test Automation and Playwright Comparison
 
-Este documento detalla el orden de prioridad recomendado para la selección de elementos en pruebas de interfaz de usuario (UI), la estrategia nativa adoptada por Playwright y una comparativa de sintaxis entre TypeScript, Python y C#.
+This document details the recommended priority order for element selection in UI tests, the native strategy adopted by Playwright, and a syntax comparison across TypeScript, Python, and C#.
 
 ---
 
-## 🥇 1. Tipo de Selectores por Orden de Uso (General)
+## 🥇 1. Selector Types by Priority (General)
 
-A nivel general en la automatización de pruebas de UI, este es el orden de prioridad estándar de la industria (del más recomendado al menos recomendado), evaluado por **estabilidad, velocidad de ejecución y facilidad de mantenimiento**:
+At the general UI automation level, this is the industry-standard priority order (most to least recommended), evaluated by **stability, execution speed, and maintainability**:
 
-1. **Atributos de Prueba Dedicados (`data-testid`, `data-cy`)**
-   * *Por qué:* Creados exclusivamente para pruebas. Son inmunes a cambios de diseño visual o estructural en la aplicación.
+1. **Dedicated Test Attributes (`data-testid`, `data-cy`)**
+   * *Why:* Created exclusively for tests. Immune to visual or structural design changes in the application.
 2. **ID (`id`)**
-   * *Por qué:* Teóricamente único en la página. El motor del navegador lo busca de forma nativa a máxima velocidad. *(Evitar si es dinámico)*.
-3. **Nombre (`name`)**
-   * *Por qué:* Muy útil y estándar en elementos de formularios e inputs.
-4. **Selectores CSS (`css selector`)**
-   * *Por qué:* El método nativo más óptimo y rápido para búsquedas complejas por clases, atributos o jerarquías simples.
-5. **Texto del Enlace (`link text`)**
-   * *Por qué:* Permite interactuar con etiquetas `<a>` basándose exactamente en lo que ve el usuario.
-6. **Clase (`class name`)**
-   * *Por qué:* Útil para grupos de elementos, pero inestable para elementos individuales porque las clases de diseño cambian con frecuencia.
-7. **Nombre de la Etiqueta (`tag name`)**
-   * *Por qué:* Demasiado genérico (`div`, `input`, `button`). Solo sirve para filtrados o conteos.
+   * *Why:* Theoretically unique on the page. The browser engine finds it natively at maximum speed. *(Avoid if dynamic)*.
+3. **Name (`name`)**
+   * *Why:* Very useful and standard for form elements and inputs.
+4. **CSS Selectors (`css selector`)**
+   * *Why:* The most optimal and fastest native method for complex searches by classes, attributes, or simple hierarchies.
+5. **Link Text (`link text`)**
+   * *Why:* Allows interacting with `<a>` tags based on exactly what the user sees.
+6. **Class (`class name`)**
+   * *Why:* Useful for groups of elements, but unstable for individual elements because design classes change frequently.
+7. **Tag Name (`tag name`)**
+   * *Why:* Too generic (`div`, `input`, `button`). Only useful for filtering or counting.
 8. **XPath (`xpath`)**
-   * *Por qué:* **El menos recomendado (último recurso).** Es lento porque obliga al navegador a recorrer todo el árbol del DOM y su sintaxis es compleja y propensa a romperse ante el más mínimo cambio estructural.
+   * *Why:* **Least recommended (last resort).** Slow because it forces the browser to traverse the entire DOM tree; its syntax is complex and prone to breaking on the slightest structural change.
 
 ---
 
-## 🎭 2. Localizadores Recomendados para Playwright
+## 🎭 2. Recommended Locators for Playwright
 
-Playwright rompe con el esquema tradicional de Selenium y promueve **Localizadores Resilientes** basados en la experiencia del usuario y la accesibilidad, desalentando el uso directo de CSS o XPath genéricos.
+Playwright breaks from the traditional Selenium model and promotes **Resilient Locators** based on user experience and accessibility, discouraging the direct use of generic CSS or XPath.
 
-### Orden de prioridad nativo en Playwright:
-1. **`GetByTestId`**: El estándar de oro. Busca elementos usando el atributo dedicado a pruebas.
-2. **`GetByRole`**: El mejor para simular interacciones reales. Busca por el rol de accesibilidad del elemento (botón, enlace, campo de texto) y permite filtrar por su texto visible.
-3. **`GetByLabel` / `GetByPlaceholder`**: Ideal para formularios, asociando los campos con su etiqueta visible o texto de ayuda interna.
-4. **`GetByText`**: Para validar mensajes, títulos o contenido estático que el usuario lee en pantalla.
-5. **`Locator("css=...")`**: Solo si los localizadores de accesibilidad previos no cubren la necesidad arquitectónica del layout.
-6. **`Locator("xpath=...")`**: Último recurso absoluto. Rara vez se necesita en Playwright.
+### Native priority order in Playwright:
+1. **`GetByTestId`**: The gold standard. Finds elements using the dedicated test attribute.
+2. **`GetByRole`**: Best for simulating real interactions. Finds by the element's accessibility role (button, link, text field) and allows filtering by visible text.
+3. **`GetByLabel` / `GetByPlaceholder`**: Ideal for forms, associating fields with their visible label or placeholder text.
+4. **`GetByText`**: For validating messages, headings, or static content that the user reads on screen.
+5. **`Locator("css=...")`**: Only if the accessibility locators above don't cover the architectural layout need.
+6. **`Locator("xpath=...")`**: Absolute last resort. Rarely needed in Playwright.
 
 ---
 
-## 💻 3. Ejemplos de Sintaxis en los 3 Lenguajes
+## 💻 3. Syntax Examples in 3 Languages
 
-A continuación se muestra cómo se escriben los localizadores principales de Playwright en **TypeScript, Python (Asíncrono) y C# (.NET)**. 
+Below is how the main Playwright locators are written in **TypeScript, Python (Sync), and C# (.NET)**.
 
-*Nota: El rendimiento de ejecución es idéntico en los tres lenguajes porque todos se comunican con el mismo Driver central de Playwright a través de llamadas RPC de ultra baja latencia.*
+*Note: Execution performance is identical across all three languages because they all communicate with the same central Playwright driver through ultra-low-latency RPC calls.*
 
-### 🔹 1. Búsqueda por Test ID (`GetByTestId`)
+### 🔹 1. By Test ID (`GetByTestId`)
 * **TypeScript:**
   ```typescript
   await page.getByTestId('submit-button').click();
   ```
 * **Python:**
   ```python
-  await page.get_by_test_id("submit-button").click()
+  page.get_by_test_id("submit-button").click()
   ```
 * **C#:**
   ```csharp
   await page.GetByTestId("submit-button").ClickAsync();
   ```
 
-### 🔹 2. Búsqueda por Rol de Accesibilidad y Texto (`GetByRole`)
+### 🔹 2. By Accessibility Role and Text (`GetByRole`)
 * **TypeScript:**
   ```typescript
-  await page.getByRole('button', { name: 'Guardar cambios' }).click();
+  await page.getByRole('button', { name: 'Save changes' }).click();
   ```
 * **Python:**
   ```python
-  await page.get_by_role("button", name="Guardar cambios").click()
+  page.get_by_role("button", name="Save changes").click()
   ```
 * **C#:**
   ```csharp
-  await page.GetByRole(AriaRole.Button, new() { Name = "Guardar cambios" }).ClickAsync();
+  await page.GetByRole(AriaRole.Button, new() { Name = "Save changes" }).ClickAsync();
   ```
 
-### 🔹 3. Búsqueda por Texto Visible (`GetByText`)
+### 🔹 3. By Visible Text (`GetByText`)
 * **TypeScript:**
   ```typescript
-  await expect(page.getByText('¡Registro exitoso!')).toBeVisible();
+  await expect(page.getByText('Registration successful!')).toBeVisible();
   ```
 * **Python:**
   ```python
-  await expect(page.get_by_text("¡Registro exitoso!")).to_be_visible()
+  expect(page.get_by_text("Registration successful!")).to_be_visible()
   ```
 * **C#:**
   ```csharp
-  await Assertions.Expect(page.GetByText("¡Registro exitoso!")).ToBeVisibleAsync();
+  await Assertions.Expect(page.GetByText("Registration successful!")).ToBeVisibleAsync();
   ```
 
-### 🔹 4. Búsqueda por Etiqueta de Formulario (`GetByLabel`)
+### 🔹 4. By Form Label (`GetByLabel`)
 * **TypeScript:**
   ```typescript
-  await page.getByLabel('Correo electrónico').fill('usuario@ejemplo.com');
+  await page.getByLabel('Email address').fill('user@example.com');
   ```
 * **Python:**
   ```python
-  await page.get_by_label("Correo electrónico").fill("usuario@ejemplo.com")
+  page.get_by_label("Email address").fill("user@example.com")
   ```
 * **C#:**
   ```csharp
-  await page.GetByLabel("Correo electrónico").FillAsync("usuario@ejemplo.com");
+  await page.GetByLabel("Email address").FillAsync("user@example.com");
   ```
 
-### 🔹 5. Búsqueda por Placeholder (`GetByPlaceholder`)
+### 🔹 5. By Placeholder (`GetByPlaceholder`)
 * **TypeScript:**
   ```typescript
-  await page.getByPlaceholder('Ingresa tu contraseña').fill('Secreto123');
+  await page.getByPlaceholder('Enter your password').fill('Secret123');
   ```
 * **Python:**
   ```python
-  await page.get_by_placeholder("Ingresa tu contraseña").fill("Secreto123")
+  page.get_by_placeholder("Enter your password").fill("Secret123")
   ```
 * **C#:**
   ```csharp
-  await page.GetByPlaceholder("Ingresa tu contraseña").FillAsync("Secreto123");
+  await page.GetByPlaceholder("Enter your password").FillAsync("Secret123");
   ```
 
-### 🔹 6. Búsqueda por Texto Alternativo de Imagen (`GetByAltText`)
+### 🔹 6. By Image Alt Text (`GetByAltText`)
 * **TypeScript:**
   ```typescript
-  await page.getByAltText('Logo de la empresa').toBeVisible();
+  await expect(page.getByAltText('Company logo')).toBeVisible();
   ```
 * **Python:**
   ```python
-  await expect(page.get_by_alt_text("Logo de la empresa")).to_be_visible()
+  expect(page.get_by_alt_text("Company logo")).to_be_visible()
   ```
 * **C#:**
   ```csharp
-  await Assertions.Expect(page.GetByAltText("Logo de la empresa")).ToBeVisibleAsync();
+  await Assertions.Expect(page.GetByAltText("Company logo")).ToBeVisibleAsync();
   ```
 
-### 🔹 7. Búsqueda por Atributo `title` (`GetByTitle`)
+### 🔹 7. By `title` Attribute (`GetByTitle`)
 * **TypeScript:**
   ```typescript
-  await expect(page.getByTitle('Cerrar ventana')).toBeVisible();
+  await expect(page.getByTitle('Close window')).toBeVisible();
   ```
 * **Python:**
   ```python
-  await expect(page.get_by_title("Cerrar ventana")).to_be_visible()
+  expect(page.get_by_title("Close window")).to_be_visible()
   ```
 * **C#:**
   ```csharp
-  await Assertions.Expect(page.GetByTitle("Cerrar ventana")).ToBeVisibleAsync();
+  await Assertions.Expect(page.GetByTitle("Close window")).ToBeVisibleAsync();
   ```
 
-### 🔹 8. Uso de Selectores CSS Tradicionales (`Locator`)
+### 🔹 8. Traditional CSS Selectors (`Locator`)
 * **TypeScript:**
   ```typescript
   await page.locator('div.user-profile > ul.menu-list').click();
   ```
 * **Python:**
   ```python
-  await page.locator("div.user-profile > ul.menu-list").click()
+  page.locator("div.user-profile > ul.menu-list").click()
   ```
 * **C#:**
   ```csharp
   await page.Locator("div.user-profile > ul.menu-list").ClickAsync();
   ```
 
-### 🔹 9. XPath — Último Recurso
-Usar solo cuando ningún localizador de accesibilidad ni CSS resuelve el caso.
+### 🔹 9. XPath — Last Resort
+Use only when no accessibility locator or CSS can solve the case.
 * **TypeScript:**
   ```typescript
-  // Por texto contenido en un elemento específico
-  await page.locator('//h2[contains(text(),"Bienvenido")]').isVisible();
-  // Por posición relativa: el input justo después de un label
-  await page.locator('//label[text()="Usuario"]/following-sibling::input').fill('juan');
+  // By text contained in a specific element
+  await page.locator('//h2[contains(text(),"Welcome")]').isVisible();
+  // By relative position: the input right after a label
+  await page.locator('//label[text()="Username"]/following-sibling::input').fill('john');
   ```
 * **Python:**
   ```python
-  await page.locator('//h2[contains(text(),"Bienvenido")]').is_visible()
-  await page.locator('//label[text()="Usuario"]/following-sibling::input').fill("juan")
+  page.locator('//h2[contains(text(),"Welcome")]').is_visible()
+  page.locator('//label[text()="Username"]/following-sibling::input').fill("john")
   ```
 * **C#:**
   ```csharp
-  await page.Locator("//h2[contains(text(),'Bienvenido')]").IsVisibleAsync();
-  await page.Locator("//label[text()='Usuario']/following-sibling::input").FillAsync("juan");
+  await page.Locator("//h2[contains(text(),'Welcome')]").IsVisibleAsync();
+  await page.Locator("//label[text()='Username']/following-sibling::input").FillAsync("john");
   ```
 
 ---
 
-## 🔗 4. Filtrado y Encadenamiento de Localizadores
+## 🔗 4. Locator Filtering and Chaining
 
-Cuando una página tiene múltiples elementos del mismo tipo, Playwright permite refinar la búsqueda sin recurrir a XPath complejo.
+When a page has multiple elements of the same type, Playwright allows you to refine the search without resorting to complex XPath.
 
-### Filtrar por texto dentro de un localizador
+### Filter by text within a locator
 ```typescript
 // TypeScript
-const fila = page.locator('tr').filter({ hasText: 'Juan Pérez' });
-await fila.getByRole('button', { name: 'Editar' }).click();
+const row = page.locator('tr').filter({ hasText: 'John Smith' });
+await row.getByRole('button', { name: 'Edit' }).click();
 ```
 ```python
 # Python
-fila = page.locator("tr").filter(has_text="Juan Pérez")
-await fila.get_by_role("button", name="Editar").click()
+row = page.locator("tr").filter(has_text="John Smith")
+row.get_by_role("button", name="Edit").click()
 ```
 
-### Seleccionar por posición (primero, último, n-ésimo)
+### Select by position (first, last, nth)
 ```typescript
-// TypeScript — el primer resultado de una lista
-await page.locator('li.resultado').first().click();
-// El tercer elemento (índice base 0)
-await page.locator('li.resultado').nth(2).click();
-// El último
-await page.locator('li.resultado').last().click();
+// TypeScript — the first result in a list
+await page.locator('li.result').first().click();
+// The third element (zero-based index)
+await page.locator('li.result').nth(2).click();
+// The last one
+await page.locator('li.result').last().click();
 ```
 ```python
 # Python
-await page.locator("li.resultado").first.click()
-await page.locator("li.resultado").nth(2).click()
-await page.locator("li.resultado").last.click()
+page.locator("li.result").first.click()
+page.locator("li.result").nth(2).click()
+page.locator("li.result").last.click()
 ```
 
-### Encadenar localizadores (scope)
-Limitar la búsqueda a una sección específica de la página evita colisiones entre elementos con el mismo rol o texto.
+### Chaining locators (scope)
+Limiting the search to a specific section of the page avoids collisions between elements with the same role or text.
 ```typescript
-// TypeScript — busca el botón "Eliminar" solo dentro del card de "Producto A"
-const card = page.locator('div.product-card').filter({ hasText: 'Producto A' });
-await card.getByRole('button', { name: 'Eliminar' }).click();
+// TypeScript — find the "Delete" button only within the "Product A" card
+const card = page.locator('div.product-card').filter({ hasText: 'Product A' });
+await card.getByRole('button', { name: 'Delete' }).click();
 ```
 ```python
 # Python
-card = page.locator("div.product-card").filter(has_text="Producto A")
-await card.get_by_role("button", name="Eliminar").click()
+card = page.locator("div.product-card").filter(has_text="Product A")
+card.get_by_role("button", name="Delete").click()
 ```
 
 ---
 
-## ⚠️ 5. Anti-patrones: Qué Evitar
+## ⚠️ 5. Anti-patterns: What to Avoid
 
-| Anti-patrón | Problema | Alternativa |
+| Anti-pattern | Problem | Alternative |
 | :--- | :--- | :--- |
-| `locator('.btn-primary')` para un solo botón | La clase puede aplicarse a múltiples elementos; cambia con el diseño. | `getByRole('button', { name: 'Guardar' })` |
-| `locator('div > div > span:nth-child(3)')` | Se rompe ante cualquier cambio de layout. | `getByTestId(...)` o `getByRole(...)` |
-| XPath con índices numéricos `(//input)[2]` | El índice cambia si se agrega un campo al formulario. | `getByLabel('Apellido')` |
-| `locator('#id-123abc')` con IDs autogenerados | Los IDs dinámicos cambian en cada build o sesión. | Solicitar `data-testid` al equipo de desarrollo. |
-| Texto con mayúsculas/minúsculas fijas `getByText('GUARDAR')` | Puede romperse si se cambia el estilo CSS (`text-transform`). | Usar la opción `{ exact: false }` o `getByRole`. |
+| `locator('.btn-primary')` for a single button | The class may apply to multiple elements; changes with design. | `getByRole('button', { name: 'Save' })` |
+| `locator('div > div > span:nth-child(3)')` | Breaks on any layout change. | `getByTestId(...)` or `getByRole(...)` |
+| XPath with numeric indexes `(//input)[2]` | The index shifts if a new field is added to the form. | `getByLabel('Last name')` |
+| `locator('#id-123abc')` with auto-generated IDs | Dynamic IDs change on every build or session. | Request `data-testid` from the dev team. |
+| Fixed-case text `getByText('SAVE')` | May break if CSS style changes (`text-transform`). | Use the `{ exact: false }` option or `getByRole`. |
 
 ---
 
-## 📋 6. Tabla Resumen — ¿Cuándo usar cada localizador?
+## 📋 6. Summary Table — When to use each locator?
 
-| Localizador | Caso de uso ideal | Estabilidad |
+| Locator | Ideal use case | Stability |
 | :--- | :--- | :---: |
-| `getByTestId` | Equipos que añaden `data-testid` a sus componentes | ⭐⭐⭐⭐⭐ |
-| `getByRole` | Botones, links, inputs, checkboxes, dialogs | ⭐⭐⭐⭐⭐ |
-| `getByLabel` | Campos de formulario asociados a una etiqueta visible | ⭐⭐⭐⭐⭐ |
-| `getByPlaceholder` | Inputs con texto de ayuda pero sin label explícita | ⭐⭐⭐⭐ |
-| `getByText` | Mensajes de validación, títulos, contenido estático | ⭐⭐⭐⭐ |
-| `getByAltText` | Imágenes con atributo `alt` descriptivo | ⭐⭐⭐⭐ |
-| `getByTitle` | Tooltips o íconos con atributo `title` | ⭐⭐⭐ |
-| `locator('css=...')` | Estructuras complejas sin atributo de accesibilidad | ⭐⭐⭐ |
-| `locator('xpath=...')` | Último recurso: relaciones DOM no expresables de otra forma | ⭐⭐ |
+| `getByTestId` | Teams that add `data-testid` to their components | ⭐⭐⭐⭐⭐ |
+| `getByRole` | Buttons, links, inputs, checkboxes, dialogs | ⭐⭐⭐⭐⭐ |
+| `getByLabel` | Form fields associated with a visible label | ⭐⭐⭐⭐⭐ |
+| `getByPlaceholder` | Inputs with placeholder text but no explicit label | ⭐⭐⭐⭐ |
+| `getByText` | Validation messages, headings, static content | ⭐⭐⭐⭐ |
+| `getByAltText` | Images with a descriptive `alt` attribute | ⭐⭐⭐⭐ |
+| `getByTitle` | Tooltips or icons with a `title` attribute | ⭐⭐⭐ |
+| `locator('css=...')` | Complex structures without an accessibility attribute | ⭐⭐⭐ |
+| `locator('xpath=...')` | Last resort: DOM relationships not expressible otherwise | ⭐⭐ |
 
 ---
 
-## ⏱️ 7. Manejo de Esperas: Implícitas vs. Explícitas
+## ⏱️ 7. Wait Handling: Implicit vs. Explicit
 
-### Espera Implícita (Auto-waiting)
+### Implicit Wait (Auto-waiting)
 
-Playwright las maneja **automáticamente**. Antes de ejecutar una acción sobre un localizador, Playwright espera sin que escribas nada:
+Playwright handles this **automatically**. Before executing an action on a locator, Playwright waits — without you writing anything — for:
 
-- Que el elemento exista en el DOM
-- Que sea visible
-- Que esté habilitado (no disabled)
-- Que sea estable (no en animación)
+- The element to exist in the DOM
+- The element to be visible
+- The element to be enabled (not disabled)
+- The element to be stable (not animating)
 
 ```python
-# Playwright espera sola — no necesitas hacer nada extra
-page.locator("#btn-guardar").click()
+# Playwright waits automatically — no extra code needed
+page.locator("#save-btn").click()
 page.locator("input[name='email']").fill("test@mail.com")
 ```
 
-> Esto es distinto a Selenium, donde `implicitly_wait(10)` era un timer global crudo.
+> This is different from Selenium, where `implicitly_wait(10)` was a crude global timer.
 
 ---
 
-### Espera Explícita
+### Explicit Wait
 
-La escribes **tú** cuando necesitas esperar una condición de negocio específica que el auto-wait no cubre:
+You write this yourself when you need to wait for a specific business condition that auto-wait doesn't cover:
 
 ```python
-# Esperar que un elemento sea visible
-page.locator(".mensaje-exito").wait_for(state="visible")
+# Wait for an element to become visible
+page.locator(".success-message").wait_for(state="visible")
 
-# Esperar que una URL cambie (navegación post-login)
+# Wait for URL to change (post-login navigation)
 page.wait_for_url("**/dashboard")
 
-# Esperar respuesta de red
-with page.expect_response("**/api/usuarios") as resp:
-    page.locator("#btn-buscar").click()
+# Wait for a network response
+with page.expect_response("**/api/users") as resp:
+    page.locator("#search-btn").click()
 response = resp.value
 ```
 
 ---
 
-### Cuándo usar cada una
+### When to use each
 
-| Situación | Qué usar |
+| Situation | What to use |
 | :--- | :--- |
-| Click, fill, check en un elemento | Auto-wait (implícita) — Playwright lo hace solo |
-| Esperar que aparezca un mensaje de éxito | `wait_for(state="visible")` — explícita |
-| Esperar navegación a otra página | `wait_for_url()` — explícita |
-| Esperar que se complete una llamada API | `expect_response()` — explícita |
-| Esperar que un elemento desaparezca | `wait_for(state="hidden")` — explícita |
+| Click, fill, check on an element | Auto-wait (implicit) — Playwright handles it |
+| Wait for a success message to appear | `wait_for(state="visible")` — explicit |
+| Wait for navigation to another page | `wait_for_url()` — explicit |
+| Wait for an API call to complete | `expect_response()` — explicit |
+| Wait for an element to disappear | `wait_for(state="hidden")` — explicit |
 
-> **Regla práctica:** si el test falla por timing y el elemento está en estado incorrecto (spinner, loading, etc.), usa espera explícita. Nunca uses `time.sleep()` — enmascara problemas en lugar de resolverlos.
+> **Practical rule:** if the test fails due to timing and the element is in the wrong state (spinner, loading, etc.), use an explicit wait. Never use `time.sleep()` — it masks problems rather than solving them.

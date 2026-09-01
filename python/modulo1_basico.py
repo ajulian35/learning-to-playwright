@@ -1,111 +1,111 @@
 # =============================================================================
-# MÓDULO 1 — Ejemplo Básico: Reporte de Resultados de Pruebas
+# MODULE 1 — Basic Example: Test Results Report
 # =============================================================================
 
 
-# --- TEMA 1: Variables y tipos de datos ---
-suite = "Registro de Usuario"       # str
+# --- TOPIC 1: Variables and data types ---
+suite = "User Registration"         # str
 version = "1.0"                     # str
-total_ejecutados = 0                # int
-hay_fallos = False                  # bool
+total_executed = 0                  # int
+has_failures = False                # bool
 
 
-# --- TEMA 2: Estructuras de datos ---
+# --- TOPIC 2: Data structures ---
 
-# Tupla: estados válidos (no cambia nunca)
-ESTADOS_VALIDOS = ("PASSED", "FAILED", "SKIPPED")
+# Tuple: valid statuses (never changes)
+VALID_STATES = ("PASSED", "FAILED", "SKIPPED")
 
-# Lista de diccionarios: cada caso de prueba
-casos = [
-    {"nombre": "Registro con datos válidos",       "estado": "PASSED"},
-    {"nombre": "Registro sin correo",              "estado": "FAILED"},
-    {"nombre": "Registro con contraseña corta",    "estado": "FAILED"},
-    {"nombre": "Registro con usuario duplicado",   "estado": "PASSED"},
-    {"nombre": "Registro desde mobile",            "estado": "SKIPPED"},
+# List of dicts: each test case
+cases = [
+    {"name": "Registration with valid data",      "status": "PASSED"},
+    {"name": "Registration without email",        "status": "FAILED"},
+    {"name": "Registration with short password",  "status": "FAILED"},
+    {"name": "Registration with duplicate user",  "status": "PASSED"},
+    {"name": "Registration from mobile",          "status": "SKIPPED"},
 ]
 
 
-# --- TEMA 3: Funciones ---
+# --- TOPIC 3: Functions ---
 
-def imprimir_resultado(nombre: str, estado: str) -> str:
-    """Retorna un mensaje formateado según el estado del caso."""
-    if estado == "PASSED":
-        mensaje = f"  [OK]      {nombre}"
-    elif estado == "FAILED":
-        mensaje = f"  [FALLO]   {nombre}  <- FALLO DETECTADO"
+def print_result(name: str, status: str) -> str:
+    """Returns a formatted message based on the test case status."""
+    if status == "PASSED":
+        message = f"  [OK]      {name}"
+    elif status == "FAILED":
+        message = f"  [FAIL]    {name}  <- FAILURE DETECTED"
     else:
-        mensaje = f"  [OMITIDO] {nombre}"
-    return mensaje
+        message = f"  [SKIP]    {name}"
+    return message
 
 
-def calcular_resumen(casos: list) -> dict:
-    """Cuenta resultados por estado y calcula tasa de éxito."""
-    passed  = sum(1 for c in casos if c["estado"] == "PASSED")
-    failed  = sum(1 for c in casos if c["estado"] == "FAILED")
-    skipped = sum(1 for c in casos if c["estado"] == "SKIPPED")
+def calculate_summary(cases: list) -> dict:
+    """Counts results by status and calculates the success rate."""
+    passed  = sum(1 for c in cases if c["status"] == "PASSED")
+    failed  = sum(1 for c in cases if c["status"] == "FAILED")
+    skipped = sum(1 for c in cases if c["status"] == "SKIPPED")
     total   = passed + failed
-    tasa    = round(passed / total * 100) if total > 0 else 0
-    return {"passed": passed, "failed": failed, "skipped": skipped, "tasa": tasa}
+    rate    = round(passed / total * 100) if total > 0 else 0
+    return {"passed": passed, "failed": failed, "skipped": skipped, "rate": rate}
 
 
-# --- TEMA 4: Manejo de excepciones ---
+# --- TOPIC 4: Exception handling ---
 
-def validar_estado(estado: str):
-    """Lanza error si el estado no es reconocido."""
-    if estado not in ESTADOS_VALIDOS:
-        raise ValueError(f"Estado '{estado}' no reconocido. Use: {ESTADOS_VALIDOS}")
+def validate_status(status: str):
+    """Raises an error if the status is not recognized."""
+    if status not in VALID_STATES:
+        raise ValueError(f"Status '{status}' not recognized. Use: {VALID_STATES}")
 
 
-# --- TEMA 5: Clase básica (OOP) ---
+# --- TOPIC 5: Basic class (OOP) ---
 
-class ReportePruebas:
+class TestReport:
     def __init__(self, suite: str, version: str):
         self.suite = suite
         self.version = version
 
-    def imprimir_encabezado(self):
+    def print_header(self):
         print("=" * 50)
         print(f"  Suite  : {self.suite}")
-        print(f"  Versión: {self.version}")
+        print(f"  Version: {self.version}")
         print("=" * 50)
 
-    def imprimir_pie(self, resumen: dict):
+    def print_footer(self, summary: dict):
         print("-" * 50)
-        print(f"  PASSED : {resumen['passed']}")
-        print(f"  FAILED : {resumen['failed']}")
-        print(f"  SKIPPED: {resumen['skipped']}")
-        print(f"  Tasa de éxito: {resumen['tasa']}%")
+        print(f"  PASSED : {summary['passed']}")
+        print(f"  FAILED : {summary['failed']}")
+        print(f"  SKIPPED: {summary['skipped']}")
+        print(f"  Success rate: {summary['rate']}%")
         print("=" * 50)
 
 
 # =============================================================================
-# Ejecución
+# Execution
 # =============================================================================
 
-reporte = ReportePruebas(suite, version)
-reporte.imprimir_encabezado()
+report = TestReport(suite, version)
+report.print_header()
 
-# Bucle for: recorre cada caso
-for caso in casos:
+# for loop: iterates over each case
+for case in cases:
 
-    # try/except: valida el estado antes de imprimir
+    # try/except: validates status before printing
     try:
-        validar_estado(caso["estado"])
-        print(imprimir_resultado(caso["nombre"], caso["estado"]))
-        total_ejecutados += 1
+        validate_status(case["status"])
+        print(print_result(case["name"], case["status"]))
+        total_executed += 1
 
-        # Condicional: marca si hubo al menos un fallo
-        if caso["estado"] == "FAILED":
-            hay_fallos = True
+        # conditional: flags if at least one failure occurred
+        if case["status"] == "FAILED":
+            has_failures = True
 
     except ValueError as e:
         print(f"  [ERROR] {e}")
 
-resumen = calcular_resumen(casos)
-reporte.imprimir_pie(resumen)
+summary = calculate_summary(cases)
+report.print_footer(summary)
 
-# Mensaje final con condicional
-if hay_fallos:
-    print("  [ATENCION] Hay casos fallidos. Revisar antes de liberar.")
+# final message with conditional
+if has_failures:
+    print("  [WARNING] There are failed cases. Review before releasing.")
 else:
-    print("  [OK] Todo en orden.")
+    print("  [OK] All clear.")

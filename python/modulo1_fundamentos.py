@@ -1,208 +1,208 @@
 # =============================================================================
-# MÓDULO 1: Fundamentos de Programación con Python
-# Contexto: Mini Bug Tracker - Sistema de gestión de defectos para un QA
-# Cubre: variables/tipos, condicionales, bucles, listas/dicts, funciones,
-#        manejo de excepciones y clases (OOP)
+# MODULE 1: Programming Fundamentals with Python
+# Context: Mini Bug Tracker - Defect management system for a QA engineer
+# Covers: variables/types, conditionals, loops, lists/dicts, functions,
+#         exception handling, and classes (OOP)
 # =============================================================================
 
 
 # -----------------------------------------------------------------------------
-# TEMA 1: Variables, tipos de datos y operadores
+# TOPIC 1: Variables, data types, and operators
 # -----------------------------------------------------------------------------
-SEVERIDADES_VALIDAS = ["crítica", "alta", "media", "baja"]  # list (constante de config)
-PROYECTO = "Portal de Clientes"                             # str
-VERSION = 1.0                                               # float
-MAX_BUGS_POR_SPRINT = 20                                    # int
-DEBUG_MODE = False                                          # bool
+VALID_SEVERITIES = ["critical", "high", "medium", "low"]  # list (config constant)
+PROJECT = "Customer Portal"                                # str
+VERSION = 1.0                                              # float
+MAX_BUGS_PER_SPRINT = 20                                   # int
+DEBUG_MODE = False                                         # bool
 
 
 # -----------------------------------------------------------------------------
-# TEMA 2: Estructuras de datos — listas, diccionarios, tuplas y sets
+# TOPIC 2: Data structures — lists, dicts, tuples, and sets
 # -----------------------------------------------------------------------------
 
-# Diccionario: cada bug es un registro de datos clave-valor
-def crear_bug(id: int, titulo: str, severidad: str, estado: str = "abierto") -> dict:
+# Dict: each bug is a key-value data record
+def create_bug(id: int, title: str, severity: str, status: str = "open") -> dict:
     return {
         "id": id,
-        "titulo": titulo,
-        "severidad": severidad,
-        "estado": estado,
+        "title": title,
+        "severity": severity,
+        "status": status,
     }
 
-# Lista: colección de bugs del sprint actual
-bugs_sprint: list = []
+# List: collection of bugs in the current sprint
+sprint_bugs: list = []
 
-# Tupla: estados posibles (inmutable — no deben cambiar en runtime)
-ESTADOS_POSIBLES: tuple = ("abierto", "en progreso", "resuelto", "cerrado")
+# Tuple: possible statuses (immutable — must not change at runtime)
+VALID_STATUSES: tuple = ("open", "in progress", "resolved", "closed")
 
-# Set: módulos únicos con al menos un bug activo (sin duplicados)
-modulos_afectados: set = set()
+# Set: unique modules with at least one active bug (no duplicates)
+affected_modules: set = set()
 
 
 # -----------------------------------------------------------------------------
-# TEMA 3: Funciones, argumentos, retornos y manejo de excepciones (try/except)
+# TOPIC 3: Functions, arguments, return values, and exception handling (try/except)
 # -----------------------------------------------------------------------------
 
-def agregar_bug(titulo: str, severidad: str, modulo: str) -> dict:
-    """Registra un nuevo bug validando sus datos."""
-    if severidad not in SEVERIDADES_VALIDAS:
-        raise ValueError(f"Severidad '{severidad}' no válida. Use: {SEVERIDADES_VALIDAS}")
+def add_bug(title: str, severity: str, module: str) -> dict:
+    """Registers a new bug after validating its data."""
+    if severity not in VALID_SEVERITIES:
+        raise ValueError(f"Severity '{severity}' is not valid. Use: {VALID_SEVERITIES}")
 
-    bug_id = len(bugs_sprint) + 1
-    bug = crear_bug(bug_id, titulo, severidad)
-    bugs_sprint.append(bug)
-    modulos_afectados.add(modulo)
+    bug_id = len(sprint_bugs) + 1
+    bug = create_bug(bug_id, title, severity)
+    sprint_bugs.append(bug)
+    affected_modules.add(module)
 
     return bug
 
 
-def cambiar_estado(bug_id: int, nuevo_estado: str) -> bool:
-    """Cambia el estado de un bug. Retorna True si tuvo éxito."""
-    if nuevo_estado not in ESTADOS_POSIBLES:
-        raise ValueError(f"Estado '{nuevo_estado}' no permitido.")
+def change_status(bug_id: int, new_status: str) -> bool:
+    """Changes the status of a bug. Returns True on success."""
+    if new_status not in VALID_STATUSES:
+        raise ValueError(f"Status '{new_status}' is not allowed.")
 
-    for bug in bugs_sprint:
+    for bug in sprint_bugs:
         if bug["id"] == bug_id:
-            bug["estado"] = nuevo_estado
+            bug["status"] = new_status
             return True
-    return False  # bug no encontrado
+    return False  # bug not found
 
 
-def obtener_resumen() -> dict:
-    """Calcula métricas del sprint actual."""
-    total = len(bugs_sprint)
-    resueltos = sum(1 for b in bugs_sprint if b["estado"] in ("resuelto", "cerrado"))
-    abiertos = total - resueltos
-    tasa_resolucion = (resueltos / total * 100) if total > 0 else 0.0
+def get_summary() -> dict:
+    """Calculates metrics for the current sprint."""
+    total = len(sprint_bugs)
+    resolved = sum(1 for b in sprint_bugs if b["status"] in ("resolved", "closed"))
+    open_bugs = total - resolved
+    resolution_rate = (resolved / total * 100) if total > 0 else 0.0
 
     return {
         "total": total,
-        "resueltos": resueltos,
-        "abiertos": abiertos,
-        "tasa_resolucion": round(tasa_resolucion, 2),
+        "resolved": resolved,
+        "open": open_bugs,
+        "resolution_rate": round(resolution_rate, 2),
     }
 
 
 # -----------------------------------------------------------------------------
-# TEMA 4 (OOP): Clase que encapsula el Bug Tracker completo
+# TOPIC 4 (OOP): Class that encapsulates the full Bug Tracker
 # -----------------------------------------------------------------------------
 
 class BugTracker:
-    """Gestiona el ciclo de vida de los bugs de un proyecto."""
+    """Manages the lifecycle of bugs in a project."""
 
-    # Atributo de clase (compartido por todas las instancias)
-    instancias_creadas: int = 0
+    # Class attribute (shared by all instances)
+    created_instances: int = 0
 
-    def __init__(self, proyecto: str, version: float):
-        # Atributos de instancia
-        self.proyecto = proyecto
+    def __init__(self, project: str, version: float):
+        # Instance attributes
+        self.project = project
         self.version = version
-        self._bugs: list = []           # privado por convención
-        self._proximo_id: int = 1
+        self._bugs: list = []       # private by convention
+        self._next_id: int = 1
 
-        BugTracker.instancias_creadas += 1
+        BugTracker.created_instances += 1
 
-    # Método de instancia
-    def registrar(self, titulo: str, severidad: str) -> dict:
+    # Instance method
+    def register(self, title: str, severity: str) -> dict:
         try:
-            bug = crear_bug(self._proximo_id, titulo, severidad)
+            bug = create_bug(self._next_id, title, severity)
             self._bugs.append(bug)
-            self._proximo_id += 1
+            self._next_id += 1
             return bug
         except ValueError as e:
-            print(f"  [ERROR] No se pudo registrar el bug: {e}")
+            print(f"  [ERROR] Could not register bug: {e}")
             return {}
 
-    def listar_por_severidad(self, severidad: str) -> list:
-        return [b for b in self._bugs if b["severidad"] == severidad]
+    def list_by_severity(self, severity: str) -> list:
+        return [b for b in self._bugs if b["severity"] == severity]
 
-    def resumen(self) -> dict:
+    def summary(self) -> dict:
         total = len(self._bugs)
-        criticos = len(self.listar_por_severidad("crítica"))
-        return {"proyecto": self.proyecto, "version": self.version,
-                "total_bugs": total, "criticos": criticos}
+        critical = len(self.list_by_severity("critical"))
+        return {"project": self.project, "version": self.version,
+                "total_bugs": total, "critical": critical}
 
-    # Método especial (dunder) — representación legible del objeto
+    # Special method (dunder) — human-readable representation
     def __str__(self) -> str:
-        return f"BugTracker[{self.proyecto} v{self.version}] — {len(self._bugs)} bug(s)"
+        return f"BugTracker[{self.project} v{self.version}] — {len(self._bugs)} bug(s)"
 
 
 # =============================================================================
-# DEMO: Ejecución del programa
+# DEMO: Program execution
 # =============================================================================
 
 if __name__ == "__main__":
     print("=" * 60)
-    print(f"  Mini Bug Tracker — {PROYECTO} v{VERSION}")
+    print(f"  Mini Bug Tracker — {PROJECT} v{VERSION}")
     print("=" * 60)
 
-    # --- Uso de funciones standalone + manejo de excepciones ---
-    print("\n1. Registrando bugs (funciones y try/except):")
+    # --- Standalone functions + exception handling ---
+    print("\n1. Registering bugs (functions and try/except):")
 
-    entradas = [
-        ("Login falla con usuario vacío",   "crítica",  "Autenticación"),
-        ("Botón 'Guardar' no responde",     "alta",     "Formularios"),
-        ("Texto del footer mal alineado",   "baja",     "UI"),
-        ("Error al exportar PDF",           "alta",     "Reportes"),
-        ("Severidad inválida de prueba",    "urgente",  "Test"),   # debe fallar
+    entries = [
+        ("Login fails with empty username",  "critical", "Authentication"),
+        ("Save button does not respond",     "high",     "Forms"),
+        ("Footer text misaligned",           "low",      "UI"),
+        ("Error when exporting PDF",         "high",     "Reports"),
+        ("Invalid severity test",            "urgent",   "Test"),   # should fail
     ]
 
-    for titulo, sev, modulo in entradas:
+    for title, sev, module in entries:
         try:
-            bug = agregar_bug(titulo, sev, modulo)
-            print(f"  [OK] Bug #{bug['id']}: '{bug['titulo']}' ({bug['severidad']})")
+            bug = add_bug(title, sev, module)
+            print(f"  [OK] Bug #{bug['id']}: '{bug['title']}' ({bug['severity']})")
         except ValueError as e:
             print(f"  [ERROR] {e}")
 
-    # --- Condicionales y operadores ---
-    print("\n2. Verificando límite del sprint (condicionales):")
-    cantidad_actual = len(bugs_sprint)
-    if cantidad_actual == 0:
-        print("  Sin bugs registrados.")
-    elif cantidad_actual < MAX_BUGS_POR_SPRINT:
-        disponibles = MAX_BUGS_POR_SPRINT - cantidad_actual
-        print(f"  {cantidad_actual} bug(s) registrados. Quedan {disponibles} slots disponibles.")
+    # --- Conditionals and operators ---
+    print("\n2. Checking sprint limit (conditionals):")
+    current_count = len(sprint_bugs)
+    if current_count == 0:
+        print("  No bugs registered.")
+    elif current_count < MAX_BUGS_PER_SPRINT:
+        available = MAX_BUGS_PER_SPRINT - current_count
+        print(f"  {current_count} bug(s) registered. {available} slots remaining.")
     else:
-        print(f"  ¡ALERTA! Límite del sprint alcanzado ({MAX_BUGS_POR_SPRINT} bugs).")
+        print(f"  ALERT! Sprint limit reached ({MAX_BUGS_PER_SPRINT} bugs).")
 
-    # --- Bucle for sobre lista ---
-    print("\n3. Listado de todos los bugs (bucle for):")
-    for bug in bugs_sprint:
-        print(f"  #{bug['id']} | {bug['severidad']:8} | {bug['estado']:12} | {bug['titulo']}")
+    # --- for loop over list ---
+    print("\n3. Full bug listing (for loop):")
+    for bug in sprint_bugs:
+        print(f"  #{bug['id']} | {bug['severity']:8} | {bug['status']:12} | {bug['title']}")
 
-    # --- Cambio de estado y bucle while ---
-    print("\n4. Resolviendo bugs críticos (bucle while):")
-    pendientes_criticos = [b for b in bugs_sprint if b["severidad"] == "crítica"]
+    # --- Status change and while loop ---
+    print("\n4. Resolving critical bugs (while loop):")
+    pending_critical = [b for b in sprint_bugs if b["severity"] == "critical"]
     index = 0
-    while index < len(pendientes_criticos):
-        bug = pendientes_criticos[index]
-        cambiar_estado(bug["id"], "resuelto")
-        print(f"  Bug #{bug['id']} marcado como 'resuelto'.")
+    while index < len(pending_critical):
+        bug = pending_critical[index]
+        change_status(bug["id"], "resolved")
+        print(f"  Bug #{bug['id']} marked as 'resolved'.")
         index += 1
 
-    # --- Resumen con diccionario ---
-    print("\n5. Resumen del sprint (diccionario + operadores):")
-    resumen = obtener_resumen()
-    for clave, valor in resumen.items():
-        print(f"  {clave:<20}: {valor}")
+    # --- Summary with dict ---
+    print("\n5. Sprint summary (dict + operators):")
+    summary = get_summary()
+    for key, value in summary.items():
+        print(f"  {key:<20}: {value}")
 
-    # --- Set: módulos únicos afectados ---
-    print(f"\n6. Módulos únicos con bugs (set): {modulos_afectados}")
+    # --- Set: unique affected modules ---
+    print(f"\n6. Unique modules with bugs (set): {affected_modules}")
 
-    # --- Tupla: estados posibles ---
-    print(f"\n7. Estados permitidos (tupla): {ESTADOS_POSIBLES}")
+    # --- Tuple: allowed statuses ---
+    print(f"\n7. Allowed statuses (tuple): {VALID_STATUSES}")
 
-    # --- OOP: uso de la clase BugTracker ---
-    print("\n8. Uso de la clase BugTracker (OOP):")
-    tracker = BugTracker("App Móvil", 2.1)
-    tracker.registrar("Crash al iniciar sesión", "crítica")
-    tracker.registrar("Imagen no carga en perfil", "media")
-    tracker.registrar("Severidad incorrecta", "grave")      # dispara excepción interna
-    print(f"  {tracker}")                                   # llama a __str__
-    print(f"  Resumen: {tracker.resumen()}")
-    print(f"  Bugs críticos: {tracker.listar_por_severidad('crítica')}")
-    print(f"  Total instancias de BugTracker creadas: {BugTracker.instancias_creadas}")
+    # --- OOP: using the BugTracker class ---
+    print("\n8. Using the BugTracker class (OOP):")
+    tracker = BugTracker("Mobile App", 2.1)
+    tracker.register("App crashes on login", "critical")
+    tracker.register("Profile image not loading", "medium")
+    tracker.register("Invalid severity test", "urgent")      # triggers internal exception
+    print(f"  {tracker}")                                    # calls __str__
+    print(f"  Summary: {tracker.summary()}")
+    print(f"  Critical bugs: {tracker.list_by_severity('critical')}")
+    print(f"  Total BugTracker instances created: {BugTracker.created_instances}")
 
     print("\n" + "=" * 60)
-    print("  Fin del Módulo 1")
+    print("  End of Module 1")
     print("=" * 60)

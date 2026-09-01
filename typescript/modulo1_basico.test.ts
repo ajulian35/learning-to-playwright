@@ -1,60 +1,60 @@
 // =============================================================================
-// MÓDULO 1 — Tests con Jest: Reporte de Resultados de Pruebas
-// Equivalente a Modulo1Basico.cs (NUnit) y modulo1_basico.py (script)
+// MODULE 1 — Jest Tests: Test Results Report
+// Equivalent to Modulo1Basico.cs (NUnit) and modulo1_basico.py (script)
 // =============================================================================
 
-// --- Tipos y datos compartidos ---
+// --- Shared types and data ---
 
-const ESTADOS_VALIDOS = ["PASSED", "FAILED", "SKIPPED"] as const;
-type Estado = typeof ESTADOS_VALIDOS[number];
+const VALID_STATES = ["PASSED", "FAILED", "SKIPPED"] as const;
+type Status = typeof VALID_STATES[number];
 
-interface CasoPrueba {
-    nombre: string;
-    estado: Estado;
+interface TestCase {
+    name: string;
+    status: Status;
 }
 
-interface Resumen {
+interface Summary {
     passed: number;
     failed: number;
     skipped: number;
-    tasa: number;
+    rate: number;
 }
 
-const SUITE   = "Registro de Usuario";
+const SUITE   = "User Registration";
 const VERSION = "1.0";
 
-const casos: CasoPrueba[] = [
-    { nombre: "Registro con datos validos",      estado: "PASSED"  },
-    { nombre: "Registro sin correo",             estado: "FAILED"  },
-    { nombre: "Registro con contrasena corta",   estado: "FAILED"  },
-    { nombre: "Registro con usuario duplicado",  estado: "PASSED"  },
-    { nombre: "Registro desde mobile",           estado: "SKIPPED" },
+const cases: TestCase[] = [
+    { name: "Registration with valid data",      status: "PASSED"  },
+    { name: "Registration without email",        status: "FAILED"  },
+    { name: "Registration with short password",  status: "FAILED"  },
+    { name: "Registration with duplicate user",  status: "PASSED"  },
+    { name: "Registration from mobile",          status: "SKIPPED" },
 ];
 
 
-// --- Funciones a testear ---
+// --- Functions under test ---
 
-function imprimirResultado(nombre: string, estado: Estado): string {
-    if (estado === "PASSED")  return `  [OK]      ${nombre}`;
-    if (estado === "FAILED")  return `  [FALLO]   ${nombre}  <- FALLO DETECTADO`;
-    return `  [OMITIDO] ${nombre}`;
+function printResult(name: string, status: Status): string {
+    if (status === "PASSED")  return `  [OK]      ${name}`;
+    if (status === "FAILED")  return `  [FAIL]    ${name}  <- FAILURE DETECTED`;
+    return `  [SKIP]    ${name}`;
 }
 
-function calcularResumen(casos: CasoPrueba[]): Resumen {
-    const passed  = casos.filter(c => c.estado === "PASSED").length;
-    const failed  = casos.filter(c => c.estado === "FAILED").length;
-    const skipped = casos.filter(c => c.estado === "SKIPPED").length;
+function calculateSummary(cases: TestCase[]): Summary {
+    const passed  = cases.filter(c => c.status === "PASSED").length;
+    const failed  = cases.filter(c => c.status === "FAILED").length;
+    const skipped = cases.filter(c => c.status === "SKIPPED").length;
     const total   = passed + failed;
-    const tasa    = total > 0 ? Math.round(passed / total * 100) : 0;
-    return { passed, failed, skipped, tasa };
+    const rate    = total > 0 ? Math.round(passed / total * 100) : 0;
+    return { passed, failed, skipped, rate };
 }
 
-function validarEstado(estado: string): void {
-    if (!(ESTADOS_VALIDOS as readonly string[]).includes(estado))
-        throw new Error(`Estado '${estado}' no reconocido. Use: ${ESTADOS_VALIDOS.join(", ")}`);
+function validateStatus(status: string): void {
+    if (!(VALID_STATES as readonly string[]).includes(status))
+        throw new Error(`Status '${status}' not recognized. Use: ${VALID_STATES.join(", ")}`);
 }
 
-class ReportePruebas {
+class TestReport {
     constructor(private suite: string, private version: string) {}
     getSuite()   { return this.suite; }
     getVersion() { return this.version; }
@@ -62,119 +62,119 @@ class ReportePruebas {
 
 
 // =============================================================================
-// Tests — cada describe corresponde a un tema del Módulo 1
+// Tests — each describe corresponds to a topic from Module 1
 // =============================================================================
 
-// --- TEMA 1: Variables y tipos de datos ---
-describe("Tema1 - Variables y tipos", () => {
-    test("las variables tienen los tipos y valores correctos", () => {
-        const suite: string  = SUITE;
+// --- TOPIC 1: Variables and data types ---
+describe("Topic1 - Variables and types", () => {
+    test("variables have the correct types and values", () => {
+        const suite: string   = SUITE;
         const version: string = VERSION;
-        const totalCasos: number = casos.length;
-        const hayFallos: boolean = false;
+        const totalCases: number  = cases.length;
+        const hasFailures: boolean = false;
 
-        expect(suite).toBe("Registro de Usuario");
+        expect(suite).toBe("User Registration");
         expect(version).toBe("1.0");
-        expect(totalCasos).toBe(5);
-        expect(hayFallos).toBe(false);
+        expect(totalCases).toBe(5);
+        expect(hasFailures).toBe(false);
     });
 });
 
-// --- TEMA 2: Estructuras de datos ---
-describe("Tema2 - Estructuras de datos", () => {
-    test("el array de estados validos tiene 3 elementos", () => {
-        expect(ESTADOS_VALIDOS.length).toBe(3);
-        expect(ESTADOS_VALIDOS[0]).toBe("PASSED");
+// --- TOPIC 2: Data structures ---
+describe("Topic2 - Data structures", () => {
+    test("valid states array has 3 elements", () => {
+        expect(VALID_STATES.length).toBe(3);
+        expect(VALID_STATES[0]).toBe("PASSED");
     });
 
-    test("el array de casos tiene la estructura correcta", () => {
-        expect(casos.length).toBe(5);
-        expect(casos[0].nombre).toContain("validos");
-        expect(casos[0].estado).toBe("PASSED");
+    test("cases array has the correct structure", () => {
+        expect(cases.length).toBe(5);
+        expect(cases[0].name).toContain("valid");
+        expect(cases[0].status).toBe("PASSED");
     });
 
-    test("se pueden filtrar casos por estado", () => {
-        const soloFallidos = casos.filter(c => c.estado === "FAILED");
-        expect(soloFallidos.length).toBe(2);
+    test("cases can be filtered by status", () => {
+        const failedOnly = cases.filter(c => c.status === "FAILED");
+        expect(failedOnly.length).toBe(2);
     });
 });
 
-// --- TEMA 2 (cont.): Condicionales y bucles ---
-describe("Tema2 - Condicionales y bucles", () => {
-    test("el bucle detecta fallos y acumula el total ejecutado", () => {
-        let hayFallos = false;
-        let totalEjecutados = 0;
+// --- TOPIC 2 (cont.): Conditionals and loops ---
+describe("Topic2 - Conditionals and loops", () => {
+    test("loop detects failures and accumulates total executed", () => {
+        let hasFailures = false;
+        let totalExecuted = 0;
 
-        for (const caso of casos) {
-            console.log(imprimirResultado(caso.nombre, caso.estado));
-            totalEjecutados++;
-            if (caso.estado === "FAILED") hayFallos = true;
+        for (const c of cases) {
+            console.log(printResult(c.name, c.status));
+            totalExecuted++;
+            if (c.status === "FAILED") hasFailures = true;
         }
 
-        expect(hayFallos).toBe(true);
-        expect(totalEjecutados).toBe(5);
+        expect(hasFailures).toBe(true);
+        expect(totalExecuted).toBe(5);
     });
 
-    test("el mensaje final depende del condicional", () => {
-        const hayFallos = true;
-        const mensaje = hayFallos
-            ? "[ATENCION] Hay casos fallidos. Revisar antes de liberar."
-            : "[OK] Todo en orden.";
+    test("final message depends on the conditional", () => {
+        const hasFailures = true;
+        const message = hasFailures
+            ? "[WARNING] There are failed cases. Review before releasing."
+            : "[OK] All clear.";
 
-        expect(mensaje).toContain("ATENCION");
-    });
-});
-
-// --- TEMA 3: Funciones ---
-describe("Tema3 - Funciones y excepciones", () => {
-    test("imprimirResultado retorna el mensaje correcto por estado", () => {
-        expect(imprimirResultado("Login", "PASSED")).toContain("[OK]");
-        expect(imprimirResultado("Login", "FAILED")).toContain("[FALLO]");
-        expect(imprimirResultado("Login", "SKIPPED")).toContain("[OMITIDO]");
-    });
-
-    test("validarEstado no lanza error con estados validos", () => {
-        expect(() => validarEstado("PASSED")).not.toThrow();
-        expect(() => validarEstado("FAILED")).not.toThrow();
-    });
-
-    test("validarEstado lanza error con estado desconocido", () => {
-        expect(() => validarEstado("PENDIENTE"))
-            .toThrow("Estado 'PENDIENTE' no reconocido");
+        expect(message).toContain("WARNING");
     });
 });
 
-// --- TEMA 4: Resumen con funciones ---
-describe("Tema4 - calcularResumen", () => {
-    test("calcula los conteos y tasa de exito correctamente", () => {
-        const resumen = calcularResumen(casos);
-
-        expect(resumen.passed).toBe(2);
-        expect(resumen.failed).toBe(2);
-        expect(resumen.skipped).toBe(1);
-        expect(resumen.tasa).toBe(50);
+// --- TOPIC 3: Functions ---
+describe("Topic3 - Functions and exceptions", () => {
+    test("printResult returns the correct message per status", () => {
+        expect(printResult("Login", "PASSED")).toContain("[OK]");
+        expect(printResult("Login", "FAILED")).toContain("[FAIL]");
+        expect(printResult("Login", "SKIPPED")).toContain("[SKIP]");
     });
 
-    test("tasa es 0 si no hay casos ejecutados", () => {
-        const vacios: CasoPrueba[] = [
-            { nombre: "Caso omitido", estado: "SKIPPED" },
+    test("validateStatus does not throw with valid statuses", () => {
+        expect(() => validateStatus("PASSED")).not.toThrow();
+        expect(() => validateStatus("FAILED")).not.toThrow();
+    });
+
+    test("validateStatus throws with unknown status", () => {
+        expect(() => validateStatus("PENDING"))
+            .toThrow("Status 'PENDING' not recognized");
+    });
+});
+
+// --- TOPIC 4: Summary with functions ---
+describe("Topic4 - calculateSummary", () => {
+    test("calculates counts and success rate correctly", () => {
+        const summary = calculateSummary(cases);
+
+        expect(summary.passed).toBe(2);
+        expect(summary.failed).toBe(2);
+        expect(summary.skipped).toBe(1);
+        expect(summary.rate).toBe(50);
+    });
+
+    test("rate is 0 if no cases were executed", () => {
+        const empty: TestCase[] = [
+            { name: "Skipped case", status: "SKIPPED" },
         ];
-        const resumen = calcularResumen(vacios);
-        expect(resumen.tasa).toBe(0);
+        const summary = calculateSummary(empty);
+        expect(summary.rate).toBe(0);
     });
 });
 
-// --- TEMA 5: OOP ---
-describe("Tema5 - Clase ReportePruebas", () => {
-    test("el constructor asigna suite y version correctamente", () => {
-        const reporte = new ReportePruebas(SUITE, VERSION);
-        expect(reporte.getSuite()).toBe("Registro de Usuario");
-        expect(reporte.getVersion()).toBe("1.0");
+// --- TOPIC 5: OOP ---
+describe("Topic5 - Class TestReport", () => {
+    test("constructor assigns suite and version correctly", () => {
+        const report = new TestReport(SUITE, VERSION);
+        expect(report.getSuite()).toBe("User Registration");
+        expect(report.getVersion()).toBe("1.0");
     });
 
-    test("se pueden crear multiples instancias independientes", () => {
-        const r1 = new ReportePruebas("Suite A", "1.0");
-        const r2 = new ReportePruebas("Suite B", "2.0");
+    test("multiple independent instances can be created", () => {
+        const r1 = new TestReport("Suite A", "1.0");
+        const r2 = new TestReport("Suite B", "2.0");
 
         expect(r1.getSuite()).not.toBe(r2.getSuite());
         expect(r1.getVersion()).not.toBe(r2.getVersion());

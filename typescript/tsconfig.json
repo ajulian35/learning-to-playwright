@@ -8,5 +8,5 @@
     "moduleDetection": "force",
     "types": ["jest", "node"]
   },
-  "include": ["*.ts"]
+  "include": ["*.ts", "tests/**/*.ts", "pages/**/*.ts"]
 }

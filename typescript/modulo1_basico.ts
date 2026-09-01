@@ -1,124 +1,125 @@
 // =============================================================================
-// MÓDULO 1 — Ejemplo Básico: Reporte de Resultados de Pruebas
+// MODULE 1 — Basic Example: Test Results Report
 // =============================================================================
-// --- TEMA 1: Variables y tipos de datos ---
-const suite: string  = "Registro de Usuario";
+
+// --- TOPIC 1: Variables and data types ---
+const suite: string  = "User Registration";
 const version: string = "1.0";
-let totalEjecutados: number = 0;
-let hayFallos: boolean = false;
+let totalExecuted: number = 0;
+let hasFailures: boolean = false;
 
 
-// --- TEMA 2: Estructuras de datos ---
+// --- TOPIC 2: Data structures ---
 
-// Tupla (readonly array): estados válidos — no cambia nunca
-const ESTADOS_VALIDOS = ["PASSED", "FAILED", "SKIPPED"] as const;
-type Estado = typeof ESTADOS_VALIDOS[number];   // "PASSED" | "FAILED" | "SKIPPED"
+// Readonly array (tuple): valid statuses — never changes
+const VALID_STATES = ["PASSED", "FAILED", "SKIPPED"] as const;
+type Status = typeof VALID_STATES[number];   // "PASSED" | "FAILED" | "SKIPPED"
 
-// Interface: define la forma de un caso de prueba (equivalente a dict en Python)
-interface CasoPrueba {
-    nombre: string;
-    estado: Estado;
+// Interface: defines the shape of a test case (equivalent to dict in Python)
+interface TestCase {
+    name: string;
+    status: Status;
 }
 
-// Array de objetos: cada caso de prueba
-const casos: CasoPrueba[] = [
-    { nombre: "Registro con datos validos",      estado: "PASSED"  },
-    { nombre: "Registro sin correo",             estado: "FAILED"  },
-    { nombre: "Registro con contrasena corta",   estado: "FAILED"  },
-    { nombre: "Registro con usuario duplicado",  estado: "PASSED"  },
-    { nombre: "Registro desde mobile",           estado: "SKIPPED" },
+// Array of objects: each test case
+const cases: TestCase[] = [
+    { name: "Registration with valid data",      status: "PASSED"  },
+    { name: "Registration without email",        status: "FAILED"  },
+    { name: "Registration with short password",  status: "FAILED"  },
+    { name: "Registration with duplicate user",  status: "PASSED"  },
+    { name: "Registration from mobile",          status: "SKIPPED" },
 ];
 
 
-// --- TEMA 3: Funciones ---
+// --- TOPIC 3: Functions ---
 
-function imprimirResultado(nombre: string, estado: Estado): string {
-    if (estado === "PASSED")
-        return `  [OK]      ${nombre}`;
-    else if (estado === "FAILED")
-        return `  [FALLO]   ${nombre}  <- FALLO DETECTADO`;
+function printResult(name: string, status: Status): string {
+    if (status === "PASSED")
+        return `  [OK]      ${name}`;
+    else if (status === "FAILED")
+        return `  [FAIL]    ${name}  <- FAILURE DETECTED`;
     else
-        return `  [OMITIDO] ${nombre}`;
+        return `  [SKIP]    ${name}`;
 }
 
-interface Resumen {
+interface Summary {
     passed: number;
     failed: number;
     skipped: number;
-    tasa: number;
+    rate: number;
 }
 
-function calcularResumen(casos: CasoPrueba[]): Resumen {
-    const passed  = casos.filter(c => c.estado === "PASSED").length;
-    const failed  = casos.filter(c => c.estado === "FAILED").length;
-    const skipped = casos.filter(c => c.estado === "SKIPPED").length;
+function calculateSummary(cases: TestCase[]): Summary {
+    const passed  = cases.filter(c => c.status === "PASSED").length;
+    const failed  = cases.filter(c => c.status === "FAILED").length;
+    const skipped = cases.filter(c => c.status === "SKIPPED").length;
     const total   = passed + failed;
-    const tasa    = total > 0 ? Math.round(passed / total * 100) : 0;
-    return { passed, failed, skipped, tasa };
+    const rate    = total > 0 ? Math.round(passed / total * 100) : 0;
+    return { passed, failed, skipped, rate };
 }
 
 
-// --- TEMA 4: Manejo de excepciones ---
+// --- TOPIC 4: Exception handling ---
 
-function validarEstado(estado: string): void {
-    if (!(ESTADOS_VALIDOS as readonly string[]).includes(estado))
-        throw new Error(`Estado '${estado}' no reconocido. Use: ${ESTADOS_VALIDOS.join(", ")}`);
+function validateStatus(status: string): void {
+    if (!(VALID_STATES as readonly string[]).includes(status))
+        throw new Error(`Status '${status}' not recognized. Use: ${VALID_STATES.join(", ")}`);
 }
 
 
-// --- TEMA 5: Clase básica (OOP) ---
+// --- TOPIC 5: Basic class (OOP) ---
 
-class ReportePruebas {
+class TestReport {
     constructor(private suite: string, private version: string) {}
 
-    imprimirEncabezado(): void {
+    printHeader(): void {
         console.log("=".repeat(50));
         console.log(`  Suite  : ${this.suite}`);
         console.log(`  Version: ${this.version}`);
         console.log("=".repeat(50));
     }
 
-    imprimirPie(resumen: Resumen): void {
+    printFooter(summary: Summary): void {
         console.log("-".repeat(50));
-        console.log(`  PASSED : ${resumen.passed}`);
-        console.log(`  FAILED : ${resumen.failed}`);
-        console.log(`  SKIPPED: ${resumen.skipped}`);
-        console.log(`  Tasa de exito: ${resumen.tasa}%`);
+        console.log(`  PASSED : ${summary.passed}`);
+        console.log(`  FAILED : ${summary.failed}`);
+        console.log(`  SKIPPED: ${summary.skipped}`);
+        console.log(`  Success rate: ${summary.rate}%`);
         console.log("=".repeat(50));
     }
 }
 
 
 // =============================================================================
-// Ejecucion
+// Execution
 // =============================================================================
 
-const reporte = new ReportePruebas(suite, version);
-reporte.imprimirEncabezado();
+const report = new TestReport(suite, version);
+report.printHeader();
 
-// Bucle for...of: recorre cada caso
-for (const caso of casos) {
+// for...of loop: iterates over each case
+for (const c of cases) {
 
-    // try/catch: valida el estado antes de imprimir
+    // try/catch: validates status before printing
     try {
-        validarEstado(caso.estado);
-        console.log(imprimirResultado(caso.nombre, caso.estado));
-        totalEjecutados++;
+        validateStatus(c.status);
+        console.log(printResult(c.name, c.status));
+        totalExecuted++;
 
-        // Condicional: marca si hubo al menos un fallo
-        if (caso.estado === "FAILED")
-            hayFallos = true;
+        // conditional: flags if at least one failure occurred
+        if (c.status === "FAILED")
+            hasFailures = true;
 
     } catch (e) {
         console.log(`  [ERROR] ${(e as Error).message}`);
     }
 }
 
-const resumen = calcularResumen(casos);
-reporte.imprimirPie(resumen);
+const summary = calculateSummary(cases);
+report.printFooter(summary);
 
-// Mensaje final con condicional
-if (hayFallos)
-    console.log("  [ATENCION] Hay casos fallidos. Revisar antes de liberar.");
+// final message with conditional
+if (hasFailures)
+    console.log("  [WARNING] There are failed cases. Review before releasing.");
 else
-    console.log("  [OK] Todo en orden.");
+    console.log("  [OK] All clear.");

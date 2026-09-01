@@ -1,53 +1,54 @@
-# Flujo de Ejecución — `modulo1_basico.py`
+# Execution Flow — `modulo1_basico.py`
 
-Este archivo **no tiene un `main` explícito**. En Python, cuando un script no tiene
-`if __name__ == "__main__"`, todo el código al nivel raíz (sin indentación) es el
-punto de entrada — Python lo ejecuta de arriba a abajo en orden.
+This file **has no explicit `main`**. In Python, when a script has no
+`if __name__ == "__main__"`, all code at the root level (no indentation) is the
+entry point — Python executes it top to bottom in order.
 
 
 Execute:
 python modulo1_basico.py
----
-
-## Orden de ejecución
-
-```
-línea 7-10   →  define variables (suite, version, total_ejecutados, hay_fallos)
-línea 16     →  define la tupla ESTADOS_VALIDOS
-línea 19-25  →  define la lista de diccionarios: casos
-línea 30-78  →  define funciones y la clase (solo las registra, NO las ejecuta)
-
----- aquí empieza la ejecución real ----
-línea 85     →  crea el objeto ReportePruebas
-línea 86     →  imprime el encabezado
-línea 89-102 →  recorre cada caso con el bucle for
-línea 104    →  calcula el resumen
-línea 105    →  imprime el pie
-línea 108-111→  imprime el mensaje final
-```
 
 ---
 
-## Diferencia con `if __name__ == "__main__"`
+## Execution order
 
-`modulo1_fundamentos.py` sí usa este bloque:
+```
+line 7-10    →  define variables (suite, version, total_executed, has_failures)
+line 16      →  define the VALID_STATES tuple
+line 19-25   →  define the list of dicts: cases
+line 30-78   →  define functions and the class (only registers them, does NOT execute)
+
+---- actual execution starts here ----
+line 85      →  create the TestReport object
+line 86      →  print the header
+line 89-102  →  iterate over each case with the for loop
+line 104     →  calculate the summary
+line 105     →  print the footer
+line 108-111 →  print the final message
+```
+
+---
+
+## Difference from `if __name__ == "__main__"`
+
+`modulo1_fundamentos.py` uses this block:
 
 ```python
 if __name__ == "__main__":
-    # código de ejecución aquí
+    # execution code here
 ```
 
-Eso significa que el código **solo se ejecuta si el archivo se corre directamente**,
-no si otro script lo importa. Es la práctica recomendada en Python.
+That means the code **only runs if the file is executed directly**,
+not if another script imports it. This is the recommended Python practice.
 
-En `modulo1_basico.py` se omitió a propósito para simplificar la lectura del código.
+In `modulo1_basico.py` it was intentionally omitted to simplify reading the code.
 
 ---
 
-## ¿Cuándo usar cada uno?
+## When to use each approach
 
-| Situación | Recomendación |
+| Situation | Recommendation |
 |---|---|
-| Script de demostración o aprendizaje | Sin `main` está bien |
-| Archivo que otros scripts van a importar | Usar `if __name__ == "__main__"` |
-| Proyecto de producción | Siempre usar `if __name__ == "__main__"` |
+| Demo or learning script | Without `main` is fine |
+| File that other scripts will import | Use `if __name__ == "__main__"` |
+| Production project | Always use `if __name__ == "__main__"` |

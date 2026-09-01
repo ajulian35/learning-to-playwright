@@ -1,6 +1,7 @@
 // =============================================================================
-// MODULE 3 — API Test: List Shopping Cart
-// Endpoint: GET https://testing.qaautomationlabs.com/api/v1/carts
+// MODULE 3 — API Tests: Shopping Cart
+// Base: https://testing.qaautomationlabs.com/api/v1/carts
+// Verbs covered: GET (list), GET /{id}, POST, PATCH, DELETE
 // =============================================================================
 
 import { test, expect } from '@playwright/test';
@@ -47,6 +48,11 @@ interface CartsResponse {
     data:       Cart[];
     pagination: Pagination;
     meta:       Meta;
+}
+
+interface CartResponse {
+    data: Cart;
+    meta: Meta;
 }
 
 
@@ -174,5 +180,114 @@ test.describe('GET /carts — List Shopping Cart', () => {
                 expect(item.unitPrice).toBeGreaterThan(0);
             }
         }
+    });
+});
+
+
+// =============================================================================
+// GET /carts/{id} — Get a single cart by ID
+// =============================================================================
+
+test.describe('GET /carts/{id} — Get Cart by ID', () => {
+
+    test('200 - returns cart for an existing id', async ({ request }) => {
+        const response = await request.get(`${BASE_URL}/carts/1`);
+
+        expect(response.status()).toBe(200);
+
+        const body: CartResponse = await response.json();
+        expect(typeof body.data.id).toBe('number');
+        expect(body.data.id).toBe(1);
+        expect(typeof body.data.customerId).toBe('number');
+        expect(typeof body.data.status).toBe('string');
+        expect(Array.isArray(body.data.items)).toBe(true);
+    });
+
+    test('404 - returns not found for a non-existent id', async ({ request }) => {
+        const response = await request.get(`${BASE_URL}/carts/999999`);
+
+        expect(response.status()).toBe(404);
+    });
+});
+
+
+// =============================================================================
+// POST /carts — Create a new cart
+// =============================================================================
+
+test.describe('POST /carts — Create Cart', () => {
+
+    test('201 - creates a new cart and returns it', async ({ request }) => {
+        const response = await request.post(`${BASE_URL}/carts`, {
+            data: {
+                customerId: 7,
+                items: [
+                    { productId: 3, quantity: 2, unitPrice: 49.99 }
+                ]
+            }
+        });
+
+        expect(response.status()).toBe(201);
+
+        const body: CartResponse = await response.json();
+        expect(typeof body.data.id).toBe('number');
+        expect(body.data.customerId).toBe(7);
+    });
+
+    test('422 - returns validation error when body is missing', async ({ request }) => {
+        const response = await request.post(`${BASE_URL}/carts`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        expect(response.status()).toBe(422);
+    });
+});
+
+
+// =============================================================================
+// PATCH /carts/{id} — Partially update a cart
+// =============================================================================
+
+test.describe('PATCH /carts/{id} — Update Cart', () => {
+
+    test('200 - partially updates the status of an existing cart', async ({ request }) => {
+        const response = await request.patch(`${BASE_URL}/carts/1`, {
+            data: { status: 'abandoned' }
+        });
+
+        expect(response.status()).toBe(200);
+
+        const body: CartResponse = await response.json();
+        expect(typeof body.data.id).toBe('number');
+        expect(body.data.status).toBe('abandoned');
+    });
+
+    test('404 - returns not found for a non-existent id', async ({ request }) => {
+        const response = await request.patch(`${BASE_URL}/carts/999999`, {
+            data: { status: 'abandoned' }
+        });
+
+        expect(response.status()).toBe(404);
+    });
+});
+
+
+// =============================================================================
+// DELETE /carts/{id} — Delete a cart
+// =============================================================================
+
+test.describe('DELETE /carts/{id} — Delete Cart', () => {
+
+    test('204 - deletes an existing cart and returns no content', async ({ request }) => {
+        // The demo API simulates mutations without persisting them, so we use an
+        // existing dataset ID. The data is never actually removed.
+        const response = await request.delete(`${BASE_URL}/carts/1`);
+        expect(response.status()).toBe(204);
+    });
+
+    test('404 - returns not found for a non-existent id', async ({ request }) => {
+        const response = await request.delete(`${BASE_URL}/carts/999999`);
+
+        expect(response.status()).toBe(404);
     });
 });

@@ -273,6 +273,47 @@ test.describe('PATCH /carts/{id} — Update Cart', () => {
 
 
 // =============================================================================
+// PUT /carts/{id} — Fully replace a cart
+// Difference vs PATCH: PUT sends ALL fields (full replacement).
+//                      PATCH sends only the fields to change (partial update).
+// =============================================================================
+
+test.describe('PUT /carts/{id} — Replace Cart', () => {
+
+    test('200 - fully replaces an existing cart with all fields', async ({ request }) => {
+        const response = await request.put(`${BASE_URL}/carts/1`, {
+            data: {
+                customerId: 10,
+                status:     'active',
+                currency:   'USD',
+                items:      [{ productId: 5, quantity: 1, unitPrice: 99.99 }]
+            }
+        });
+
+        expect(response.status()).toBe(200);
+
+        const body: CartResponse = await response.json();
+        expect(typeof body.data.id).toBe('number');
+        expect(body.data.customerId).toBe(10);
+        expect(body.data.status).toBe('active');
+    });
+
+    test('404 - returns not found for a non-existent id', async ({ request }) => {
+        const response = await request.put(`${BASE_URL}/carts/999999`, {
+            data: {
+                customerId: 10,
+                status:     'active',
+                currency:   'USD',
+                items:      []
+            }
+        });
+
+        expect(response.status()).toBe(404);
+    });
+});
+
+
+// =============================================================================
 // DELETE /carts/{id} — Delete a cart
 // =============================================================================
 

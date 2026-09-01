@@ -8,12 +8,12 @@ There are two complementary TypeScript files:
 
 | File | Purpose | How to run |
 |---|---|---|
-| `modulo1_basico.ts` | Demo script — prints to console | `npm start` |
-| `modulo1_basico.test.ts` | Jest tests — verifies with `expect()` | `npm test` |
+| `module1_basics.ts` | Demo script — prints to console | `npm start` |
+| `module1_basics.test.ts` | Jest tests — verifies with `expect()` | `npm test` |
 
 ---
 
-## `modulo1_basico.ts` — Demo script
+## `module1_basics.ts` — Demo script
 
 Has no explicit `main`. TypeScript (like Python) executes root-level code top to bottom
 when run with `ts-node`.
@@ -42,7 +42,7 @@ npm start
 
 ---
 
-## `modulo1_basico.test.ts` — Jest tests
+## `module1_basics.test.ts` — Jest tests
 
 Each `describe` groups tests for one topic. Jest discovers and runs all
 `test()` blocks automatically.
@@ -92,11 +92,11 @@ npm test -- --testNamePattern "Topic3"
 
 | | Python | C# | TypeScript |
 |---|---|---|---|
-| Demo file | `modulo1_basico.py` | — | `modulo1_basico.ts` |
-| Test file | — | `Modulo1Basico.cs` | `modulo1_basico.test.ts` |
+| Demo file | `module1_basics.py` | — | `module1_basics.ts` |
+| Test file | — | `Module1Basics.cs` | `module1_basics.test.ts` |
 | Test framework | pytest | NUnit | Jest |
-| Demo command | `python modulo1_basico.py` | — | `npm start` |
-| Test command | `pytest tests/` | `dotnet test --filter "Modulo1Basico"` | `npm test` |
+| Demo command | `python module1_basics.py` | — | `npm start` |
+| Test command | `pytest tests/` | `dotnet test --filter "Module1Basics"` | `npm test` |
 | Data types | dynamic | strictly static | static (compiled) |
 | Dict data structure | `dict` | `Dictionary<string,string>` | `interface` / object |
 | Immutable tuple | `tuple` | `readonly string[]` | `as const` array |

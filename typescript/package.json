@@ -1,10 +1,10 @@
 {
   "name": "typescript",
   "version": "1.0.0",
-  "description": "Módulo 1 - Fundamentos de Programación con TypeScript",
+  "description": "Module 1 - Programming Fundamentals with TypeScript",
   "scripts": {
-    "start": "tsx modulo1_basico.ts",
-    "start:fundamentos": "tsx modulo1_fundamentos.ts",
+    "start": "tsx module1_basics.ts",
+    "start:fundamentos": "tsx module1_fundamentals.ts",
     "test": "jest"
   },
   "keywords": [],

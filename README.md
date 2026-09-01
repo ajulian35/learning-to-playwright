@@ -20,9 +20,9 @@ Learning_to_Playwright/
 │   │   ├── conftest.py                # Fixtures: credentials, login_page, admin_page
 │   │   ├── test_search_admin.py       # E2E test with POM
 │   │   └── test_example.py
-│   ├── modulo1_basico.py
-│   ├── modulo1_basico_flujo.md
-│   ├── modulo1_fundamentos.py
+│   ├── module1_basics.py
+│   ├── module1_basics_flow.md
+│   ├── module1_fundamentals.py
 │   ├── requirements.txt
 │   └── pytest.ini
 │
@@ -34,9 +34,9 @@ Learning_to_Playwright/
 │   │   ├── BaseTest.cs                # Loads .env, baseURL, and RequireEnv
 │   │   ├── SearchAdminTests.cs        # E2E test with POM
 │   │   └── ExampleTests.cs
-│   ├── Modulo1Basico.cs
-│   ├── Modulo1Basico_flujo.md
-│   ├── Modulo1Fundamentos.cs
+│   ├── Module1Basics.cs
+│   ├── Module1Basics_flow.md
+│   ├── Module1Fundamentals.cs
 │   ├── PlaywrightComparison.csproj
 │   └── .runsettings
 │
@@ -47,9 +47,9 @@ Learning_to_Playwright/
 │   ├── tests/
 │   │   ├── fixtures.ts                # Fixtures: credentials, loginPage, adminPage
 │   │   └── search_admin.test.ts       # E2E test with POM
-│   ├── modulo1_basico.ts
-│   ├── modulo1_basico.test.ts
-│   ├── Modulo1Basico_flujo.md
+│   ├── module1_basics.ts
+│   ├── module1_basics.test.ts
+│   ├── Module1Basics_flow.md
 │   ├── playwright.config.ts
 │   ├── tsconfig.json
 │   ├── tsconfig.playwright.json
@@ -156,7 +156,7 @@ npx playwright show-report
 
 ```bash
 cd python
-python modulo1_basico.py
+python module1_basics.py
 ```
 
 ### TypeScript

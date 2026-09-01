@@ -5,7 +5,7 @@
 namespace PlaywrightComparison;
 
 [TestFixture]
-public class Modulo1BasicoTests
+public class Module1BasicsTests
 {
     // --- TOPIC 1: Variables and data types ---
     private const string Suite   = "User Registration";

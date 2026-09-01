@@ -106,7 +106,7 @@ Add Playwright scripts alongside the existing ones:
 ```json
 {
   "scripts": {
-    "start": "tsx modulo1_basico.ts",
+    "start": "tsx module1_basics.ts",
     "test:unit": "jest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",

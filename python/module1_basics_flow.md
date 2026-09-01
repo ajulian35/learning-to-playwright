@@ -1,4 +1,4 @@
-# Execution Flow — `modulo1_basico.py`
+# Execution Flow — `module1_basics.py`
 
 This file **has no explicit `main`**. In Python, when a script has no
 `if __name__ == "__main__"`, all code at the root level (no indentation) is the
@@ -6,7 +6,7 @@ entry point — Python executes it top to bottom in order.
 
 
 Execute:
-python modulo1_basico.py
+python module1_basics.py
 
 ---
 
@@ -31,7 +31,7 @@ line 108-111 →  print the final message
 
 ## Difference from `if __name__ == "__main__"`
 
-`modulo1_fundamentos.py` uses this block:
+`module1_fundamentals.py` uses this block:
 
 ```python
 if __name__ == "__main__":
@@ -41,7 +41,7 @@ if __name__ == "__main__":
 That means the code **only runs if the file is executed directly**,
 not if another script imports it. This is the recommended Python practice.
 
-In `modulo1_basico.py` it was intentionally omitted to simplify reading the code.
+In `module1_basics.py` it was intentionally omitted to simplify reading the code.
 
 ---
 

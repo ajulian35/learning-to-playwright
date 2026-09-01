@@ -1,6 +1,6 @@
 // =============================================================================
 // MODULE 1 — Jest Tests: Test Results Report
-// Equivalent to Modulo1Basico.cs (NUnit) and modulo1_basico.py (script)
+// Equivalent to Module1Basics.cs (NUnit) and module1_basics.py (script)
 // =============================================================================
 
 // --- Shared types and data ---

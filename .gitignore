@@ -6,6 +6,7 @@ csharp/obj/
 # TypeScript
 typescript/node_modules/
 typescript/dist/
+typescript/test-results/
 
 # Python
 __pycache__/

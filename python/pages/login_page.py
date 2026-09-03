@@ -1,21 +1,12 @@
-from playwright.sync_api import Page
+from playwright.sync_api import Page, Locator
 
 
 class LoginPage:
     def __init__(self, page: Page):
         self._page = page
-
-    @property
-    def _username_input(self):
-        return self._page.get_by_role('textbox', name='Username')
-
-    @property
-    def _password_input(self):
-        return self._page.get_by_role('textbox', name='Password')
-
-    @property
-    def _login_button(self):
-        return self._page.get_by_role('button', name='Login')
+        self._username_input: Locator = page.get_by_role('textbox', name='Username')
+        self._password_input: Locator = page.get_by_role('textbox', name='Password')
+        self._login_button:   Locator = page.get_by_role('button',  name='Login')
 
     def goto(self):
         self._page.goto('/web/index.php/auth/login')

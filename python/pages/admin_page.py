@@ -1,21 +1,12 @@
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page, Locator, expect
 
 
 class AdminPage:
     def __init__(self, page: Page):
         self._page = page
-
-    @property
-    def _role_dropdown(self):
-        return self._page.locator('.oxd-select-text--after').first
-
-    @property
-    def _search_button(self):
-        return self._page.get_by_role('button', name='Search')
-
-    @property
-    def _results_container(self):
-        return self._page.locator('#app')
+        self._role_dropdown:     Locator = page.locator('.oxd-select-text--after').first
+        self._search_button:     Locator = page.get_by_role('button', name='Search')
+        self._results_container: Locator = page.locator('#app')
 
     def goto(self):
         self._page.get_by_role('link', name='Admin').click()

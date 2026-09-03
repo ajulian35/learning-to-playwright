@@ -1,18 +1,14 @@
-import { Page } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 
 export class LoginPage {
-  constructor(private page: Page) {}
+  private readonly usernameInput: Locator;
+  private readonly passwordInput: Locator;
+  private readonly loginButton: Locator;
 
-  private get usernameInput() {
-    return this.page.getByRole('textbox', { name: 'Username' });
-  }
-
-  private get passwordInput() {
-    return this.page.getByRole('textbox', { name: 'Password' });
-  }
-
-  private get loginButton() {
-    return this.page.getByRole('button', { name: 'Login' });
+  constructor(private page: Page) {
+    this.usernameInput = page.getByRole('textbox', { name: 'Username' });
+    this.passwordInput = page.getByRole('textbox', { name: 'Password' });
+    this.loginButton   = page.getByRole('button',  { name: 'Login' });
   }
 
   async goto() {

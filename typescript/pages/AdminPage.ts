@@ -1,18 +1,14 @@
-import { Page, expect } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class AdminPage {
-  constructor(private page: Page) {}
+  private readonly roleDropdown: Locator;
+  private readonly searchButton: Locator;
+  private readonly resultsContainer: Locator;
 
-  private get roleDropdown() {
-    return this.page.locator('.oxd-select-text--after').first();
-  }
-
-  private get searchButton() {
-    return this.page.getByRole('button', { name: 'Search' });
-  }
-
-  private get resultsContainer() {
-    return this.page.locator('#app');
+  constructor(private page: Page) {
+    this.roleDropdown     = page.locator('.oxd-select-text--after').first();
+    this.searchButton     = page.getByRole('button', { name: 'Search' });
+    this.resultsContainer = page.locator('#app');
   }
 
   async goto() {

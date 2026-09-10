@@ -27,7 +27,107 @@
 
 ---
 
-## 3. POC — QA Automation Labs API
+## 3. API Authentication
+
+Before an API processes a request, the client must prove who it is. These are the most common mechanisms:
+
+### 3.1 API Key
+
+A static token included in a header or query string. Simple to implement but offers no user-level identity.
+
+```http
+GET /carts
+X-API-Key: abc123secret
+```
+
+| Pros | Cons |
+|---|---|
+| Easy to set up | No expiration by default |
+| Supported everywhere | Revocation affects all callers sharing the key |
+
+---
+
+### 3.2 Basic Authentication
+
+Credentials (`username:password`) encoded in Base64 and sent in the `Authorization` header. **Always requires HTTPS.**
+
+```http
+GET /carts
+Authorization: Basic dXNlcjpwYXNzd29yZA==
+```
+
+| Pros | Cons |
+|---|---|
+| Universally supported | Password travels with every request |
+| No extra protocol needed | Base64 is encoding, not encryption |
+
+---
+
+### 3.3 Bearer Token (JWT / OAuth 2.0)
+
+A signed token (commonly a JWT) issued by an authorization server after login. The client sends it in the `Authorization` header.
+
+```http
+POST /auth/login          → returns { "token": "eyJ..." }
+
+GET /carts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+| Pros | Cons |
+|---|---|
+| Short-lived; expires automatically | Requires a login step to obtain the token |
+| Carries claims (userId, roles) | Token revocation before expiry is non-trivial |
+| Standard across REST and GraphQL APIs | |
+
+A JWT has three Base64-encoded parts separated by dots: **Header . Payload . Signature**.
+
+---
+
+### 3.4 OAuth 2.0 (Authorization Code Flow)
+
+A delegation protocol where the user grants a third-party app limited access to their account without sharing their password. Common in social login and integrations.
+
+```
+User → App → Auth Server (login + consent) → Auth Server issues code
+App exchanges code for Access Token → App calls API with token
+```
+
+| Pros | Cons |
+|---|---|
+| User never shares password with the app | More complex to implement |
+| Scoped permissions (read-only, etc.) | Requires an auth server |
+| Tokens can be refreshed | |
+
+---
+
+### 3.5 API Key in Query String
+
+Some public or legacy APIs accept the key as a URL parameter instead of a header.
+
+```http
+GET /carts?api_key=abc123secret
+```
+
+> Avoid this pattern in production — URLs are logged by proxies and browser history.
+
+---
+
+### 3.6 Quick Comparison
+
+| Method | Where credential travels | Expiration | Best for |
+|---|---|---|---|
+| API Key (header) | `X-API-Key` header | Usually none | Server-to-server, simple integrations |
+| Basic Auth | `Authorization` header | None | Internal tools, quick prototypes |
+| Bearer / JWT | `Authorization` header | Yes (configurable) | Modern REST APIs, mobile, SPAs |
+| OAuth 2.0 | `Authorization` header | Yes + refresh token | Third-party access, social login |
+| API Key (query) | URL parameter | Usually none | Legacy public APIs (avoid in new work) |
+| JSON body login | Request body (`email` + `password`) | No — issues a token | Obtaining a Bearer/JWT from a REST login endpoint (`POST /auth/login`) |
+| Token refresh (body) | Request body (`refreshToken`) | Yes — issues a new `accessToken` | Renewing an expired token without re-login (`POST /auth/refresh`) |
+
+---
+
+## 4. POC — QA Automation Labs API
 
 - **Base URL:** `https://testing.qaautomationlabs.com/api/v1`
 - **API Explorer:** `https://api.qaautomationlabs.com/index.php`
@@ -35,7 +135,7 @@
 
 ---
 
-## 4. Endpoint: List Shopping Cart — `GET /carts`
+## 5. Endpoint: List Shopping Cart — `GET /carts`
 
 ### Description
 Returns a paginated list of shopping carts. Supports filtering, sorting, and full-text search via query parameters.
@@ -94,7 +194,7 @@ Returns a paginated list of shopping carts. Supports filtering, sorting, and ful
 
 ---
 
-## 5. Test Strategy for `GET /carts`
+## 6. Test Strategy for `GET /carts`
 
 | Scenario | What to validate |
 |---|---|
@@ -107,7 +207,7 @@ Returns a paginated list of shopping carts. Supports filtering, sorting, and ful
 
 ---
 
-## 6. Related Endpoints
+## 7. Related Endpoints
 
 | Method | Path | Description |
 |---|---|---|
